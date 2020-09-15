@@ -28,7 +28,7 @@ const Header = () => {
   return (
     <header
       css={css`
-        border-bottom: 2px solid var(--gris3);
+        border-bottom: 2px solid var(--grey3);
         padding: 1rem 0;
       `}
     >
