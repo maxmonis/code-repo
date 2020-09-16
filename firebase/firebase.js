@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/';
 import config from './config';
 
 class Firebase {
@@ -15,6 +16,9 @@ class Firebase {
       password
     );
     return await newUser.user.updateProfile({ displayName: name });
+  }
+  async login(email, password) {
+    return this.auth.signInWithEmailAndPassword(email, password);
   }
 }
 
