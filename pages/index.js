@@ -5,7 +5,9 @@ const Index = () => {
   return (
     <div className='container'>
       <Layout>
-        <h1>Index</h1>
+        <div className='container'>
+          <h1>Index</h1>
+        </div>
       </Layout>
     </div>
   );

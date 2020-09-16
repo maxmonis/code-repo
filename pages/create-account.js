@@ -6,14 +6,16 @@ const CreateAccount = () => {
   return (
     <div>
       <Layout>
-        <h1
-          css={css`
-            text-align: center;
-            margin-top: 5rem;
-          `}
-        >
-          Create New Account
-        </h1>
+        <div className='container'>
+          <h1
+            css={css`
+              text-align: center;
+              margin-top: 5rem;
+            `}
+          >
+            Create New Account
+          </h1>
+        </div>
       </Layout>
     </div>
   );
