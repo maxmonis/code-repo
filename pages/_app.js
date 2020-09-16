@@ -1,5 +1,13 @@
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
+import firebase, { FirebaseContext } from '../firebase';
+import useAuth from '../hooks/useAuth';
 
-export default MyApp
+const MyApp = ({ Component, pageProps }) => {
+  const user = useAuth();
+  return (
+    <FirebaseContext.Provider value={{ firebase, user }}>
+      <Component {...pageProps} />
+    </FirebaseContext.Provider>
+  );
+};
+
+export default MyApp;
