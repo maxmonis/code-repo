@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 import Layout from '../components/layout/Layout';
 import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
 import useValidate from '../hooks/useValidate';
-import validateCreateAccount from '../validation/validateCreateAccount';
+import validateAccount from '../validation/validateAccount';
 import firebase from '../firebase';
 
 const CreateAccount = () => {
@@ -20,7 +20,7 @@ const CreateAccount = () => {
     handleChange,
     handleSubmit,
     handleBlur,
-  } = useValidate(INITIAL_STATE, validateCreateAccount, createAccount);
+  } = useValidate(INITIAL_STATE, validateAccount, createAccount);
   const { name, email, password } = values;
   async function createAccount() {
     try {

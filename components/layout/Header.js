@@ -61,6 +61,9 @@ const Header = () => {
               <Button onClick={handleLogout} bgColor='true'>
                 Log {user.displayName} Out
               </Button>
+              <Link href='/new-challenge'>
+                <Button bgColor='true'>New Challenge</Button>
+              </Link>
             </>
           ) : (
             <>
