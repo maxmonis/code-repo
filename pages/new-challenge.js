@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useRouter } from 'next/router';
 import FileUploader from 'react-firebase-file-uploader';
 import { css } from '@emotion/core';
 import Layout from '../components/layout/Layout';
 import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
 import useValidate from '../hooks/useValidate';
 import validateChallenge from '../validation/validateChallenge';
+import { FirebaseContext } from '../firebase';
 
 const NewChallenge = () => {
+  const { user, firebase } = useContext(FirebaseContext);
   const [error, setError] = useState(null);
+  const router = useRouter();
   const INITIAL_STATE = {
     name: '',
     source: '',
@@ -23,8 +27,18 @@ const NewChallenge = () => {
   } = useValidate(INITIAL_STATE, validateChallenge, newChallenge);
   const { name, source, url, description } = values;
   async function newChallenge() {
+    if (!user) return router.push('/login');
+    const challenge = {
+      name,
+      source,
+      url,
+      description,
+      votes: 0,
+      comments: [],
+      created: Date.now(),
+    };
     try {
-      console.log('newChallenge');
+      firebase.db.collection('challenges').add(challenge);
     } catch ({ message }) {
       console.error('Challenge could not be created', message);
       setError(message);
