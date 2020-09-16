@@ -11,7 +11,7 @@ const useValidate = (initialValues, validate, fn) => {
       }
       setSubmit(false);
     }
-  }, [submit]);
+  }, [errors]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues({
@@ -24,7 +24,10 @@ const useValidate = (initialValues, validate, fn) => {
     setErrors(validate(values));
     setSubmit(true);
   };
-  return { values, errors, submit, handleChange, handleSubmit };
+  const handleBlur = () => {
+    setErrors(validate(values));
+  };
+  return { values, errors, submit, handleChange, handleSubmit, handleBlur };
 };
 
 export default useValidate;
