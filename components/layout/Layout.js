@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
         `}
       />
       <Head>
-        <title>FoodFotos</title>
+        <title>CodeRepo</title>
         <link
           rel='stylesheet'
           href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css'

@@ -12,7 +12,7 @@ const InputSubmit = styled.button`
   width: 3rem;
   display: block;
   background-size: 4rem;
-  background-image: url('/static/img/buscar.png');
+  background-image: url('/static/img/search.png');
   background-repeat: no-repeat;
   position: absolute;
   right: 1rem;
@@ -32,7 +32,7 @@ const Search = () => {
         position: relative;
       `}
     >
-      <InputText type='text' placeholder='Search Fotos' />
+      <InputText type='text' placeholder='Search...' />
       <InputSubmit type='submit'>Search</InputSubmit>
     </form>
   );
