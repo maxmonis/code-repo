@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 
-const Meal = styled.li`
+const Challenge = styled.li`
   padding: 4rem;
   display: flex;
   justify-content: space-between;
@@ -70,9 +70,9 @@ const Votes = styled.div`
   }
 `;
 
-const MealDetails = () => {
+const ChallengeDetails = () => {
   return (
-    <Meal>
+    <Challenge>
       <Details>
         <div>
           <Image />
@@ -95,8 +95,8 @@ const MealDetails = () => {
         <div> &#9650; </div>
         <p>Votes go here</p>
       </Votes>
-    </Meal>
+    </Challenge>
   );
 };
 
-export default MealDetails;
+export default ChallengeDetails;

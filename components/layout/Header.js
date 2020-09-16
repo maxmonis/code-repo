@@ -40,7 +40,7 @@ const Header = () => {
           `}
         >
           <Link href='/'>
-            <Logo>FF</Logo>
+            <Logo>CR</Logo>
           </Link>
           <Search />
           <Navbar />
