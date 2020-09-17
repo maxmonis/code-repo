@@ -72,16 +72,7 @@ const Votes = styled.div`
 `;
 
 const Challenge = ({ challenge }) => {
-  const {
-    name,
-    description,
-    code,
-    imgURL,
-    votes,
-    comments,
-    created,
-    id,
-  } = challenge;
+  const { name, description, imgURL, votes, comments, created, id } = challenge;
   return (
     <Container>
       <Details>
@@ -93,8 +84,6 @@ const Challenge = ({ challenge }) => {
             <Title>{name}</Title>
           </Link>
           <Text>{description}</Text>
-          <Title>Solution</Title>
-          <Text>{code}</Text>
           <Comments>
             <div>
               <img src='/static/img/comment.png' />

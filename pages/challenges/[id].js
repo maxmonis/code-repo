@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../../components/layout/Layout';
+import Error from '../../components/layout/404';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Field, Submit } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
+import { useRouter } from 'next/router';
+import { FirebaseContext } from '../../firebase';
 
 const Container = styled.div`
   @media (min-width: 768px) {
@@ -23,7 +26,32 @@ const Creator = styled.p`
 `;
 
 const Challenge = () => {
-  return (
+  const router = useRouter();
+  const {
+    query: { id },
+  } = router;
+  const [challenge, setChallenge] = useState({});
+  const [error, setError] = useState(false);
+  const { firebase } = useContext(FirebaseContext);
+  useEffect(() => {
+    const getChallenge = async () => {
+      try {
+        const product = await firebase.db
+          .collection('challenges')
+          .doc(id)
+          .get();
+        console.log(product.data());
+        setChallenge(product.data());
+      } catch (error) {
+        setError(true);
+      }
+    };
+    getChallenge();
+  }, [id]);
+  const { name, votes, imgURL, code } = challenge;
+  return error ? (
+    <Error />
+  ) : (
     <Layout>
       <>
         <div className='container'>
@@ -33,14 +61,12 @@ const Challenge = () => {
               margin-top: 5rem;
             `}
           >
-            Name
+            {name}
           </h1>
           <Container>
             <div>
-              <p>Published: a while</p>
-              <p>ago by: Someone from Somewhere</p>
-              <img />
-              <p>Description</p>
+              <img src={imgURL} />
+              <p>{code}</p>
               <>
                 <h2>Add a Comment</h2>
                 <form>
@@ -77,9 +103,7 @@ const Challenge = () => {
                   </p>
                   <Creator>You are creator</Creator>
                 </li>
-                )
               </ul>
-              )
             </div>
             <aside>
               <Button target='_blank' bgColor='true'>
@@ -95,7 +119,7 @@ const Challenge = () => {
                     text-align: center;
                   `}
                 >
-                  Likes go here
+                  {votes} upvotes
                 </p>
                 <Button>Like</Button>
               </div>
