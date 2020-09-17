@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import FileUploader from 'react-firebase-file-uploader';
 import { css } from '@emotion/core';
 import Layout from '../components/layout/Layout';
-import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
+import { Form, Field, Submit, Error } from '../components/ui/Form';
 import useValidate from '../hooks/useValidate';
 import validateChallenge from '../validation/validateChallenge';
 import { FirebaseContext } from '../firebase';
@@ -54,9 +54,9 @@ const NewChallenge = () => {
               margin-top: 5rem;
             `}
           >
-            Create New Account
+            Upload New Challenge
           </h1>
-          <Form onSubmit={handleSubmit} noValidate>
+          <Form onSubmit={handleSubmit}>
             <fieldset>
               <legend>General Information</legend>
               <Field>
@@ -69,9 +69,9 @@ const NewChallenge = () => {
                   value={name}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  required
                 />
               </Field>
-              {errors.name && <Error>{errors.name}</Error>}
               <Field>
                 <label htmlFor='source'>Source</label>
                 <input
@@ -82,9 +82,9 @@ const NewChallenge = () => {
                   value={source}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  required
                 />
               </Field>
-              {errors.source && <Error>{errors.source}</Error>}
               <Field>
                 <label htmlFor='url'>URL</label>
                 <input
@@ -95,9 +95,9 @@ const NewChallenge = () => {
                   value={url}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  required
                 />
               </Field>
-              {errors.url && <Error>{errors.url}</Error>}
               <Field>
                 <label htmlFor='solution'>Solution</label>
                 <FileUploader
@@ -107,7 +107,6 @@ const NewChallenge = () => {
                   randomizeFilename
                 />
               </Field>
-              {errors.solution && <Error>{errors.solution}</Error>}
             </fieldset>
             <fieldset>
               <legend>About Your Solution</legend>
@@ -119,13 +118,20 @@ const NewChallenge = () => {
                   value={description}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  required
                 />
               </Field>
-
-              {errors.description && <Error>{errors.description}</Error>}
             </fieldset>
-            {error && <Error>{error}</Error>}
-            <InputSubmit type='submit' value='Publish Challenge' />
+            {(Object.keys(errors).length || error) && (
+              <Error>
+                {errors.name ||
+                  errors.source ||
+                  errors.url ||
+                  errors.description ||
+                  error}
+              </Error>
+            )}
+            <Submit type='submit' value='Publish Challenge' />
           </Form>
         </div>
       </Layout>

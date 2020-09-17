@@ -30,7 +30,7 @@ export const Field = styled.div`
   }
 `;
 
-export const InputSubmit = styled.input`
+export const Submit = styled.input`
   background-color: var(--orange);
   width: 100%;
   padding: 1.5rem;

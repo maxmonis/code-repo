@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import { css } from '@emotion/core';
 import Layout from '../components/layout/Layout';
-import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
+import { Form, Field, Submit, Error } from '../components/ui/Form';
 import useValidate from '../hooks/useValidate';
 import validateLogin from '../validation/validateLogin';
 import firebase from '../firebase';
@@ -41,7 +41,7 @@ const Login = () => {
           >
             Log In To Account
           </h1>
-          <Form onSubmit={handleSubmit} noValidate>
+          <Form onSubmit={handleSubmit}>
             <Field>
               <label htmlFor='email'>Email</label>
               <input
@@ -52,9 +52,9 @@ const Login = () => {
                 value={email}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
               />
             </Field>
-            {errors.email && <Error>{errors.email}</Error>}
             <Field>
               <label htmlFor='password'>Password</label>
               <input
@@ -65,11 +65,14 @@ const Login = () => {
                 value={password}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
+                minLength='6'
               />
             </Field>
-            {errors.password && <Error>{errors.password}</Error>}
-            {error && <Error>{error}</Error>}
-            <InputSubmit type='submit' value='Access Account' />
+            {(Object.keys(errors).length || error) && (
+              <Error>{errors.email || errors.password || error}</Error>
+            )}
+            <Submit type='submit' value='Access Account' />
           </Form>
         </div>
       </Layout>
