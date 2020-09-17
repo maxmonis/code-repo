@@ -41,7 +41,7 @@ const NewChallenge = () => {
       description,
       imgURL,
       code,
-      votes: 0,
+      votes: [],
       comments: [],
       created: Date.now(),
       creator: {

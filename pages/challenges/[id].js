@@ -50,6 +50,18 @@ const Challenge = () => {
     created,
     creator,
   } = challenge;
+  const handleVote = () => {
+    if (!user) return router.push('login');
+    const { uid } = user;
+    if (!votes.includes(uid)) {
+      const updatedVotes = [...votes, uid];
+      firebase.db
+        .collection('challenges')
+        .doc(id)
+        .update({ votes: updatedVotes });
+      setChallenge({ ...challenge, votes: updatedVotes });
+    }
+  };
   return error ? (
     <Error />
   ) : (
@@ -123,9 +135,13 @@ const Challenge = () => {
                     text-align: center;
                   `}
                 >
-                  {votes} upvotes
+                  {votes.length} upvote{votes.length !== 1 && 's'}
                 </p>
-                {user && <Button>Like</Button>}
+                {user && (
+                  <Button onClick={handleVote} bgColor='true'>
+                    Upvote
+                  </Button>
+                )}
               </div>
             </aside>
           </Container>
