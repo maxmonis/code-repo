@@ -23,6 +23,7 @@ const Challenge = () => {
     query: { id },
   } = router;
   const [challenge, setChallenge] = useState({});
+  const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
   const { firebase, user } = useContext(FirebaseContext);
   useEffect(() => {
@@ -46,20 +47,42 @@ const Challenge = () => {
     url,
     source,
     imgURL,
+    comments,
     code,
     created,
     creator,
   } = challenge;
   const handleVote = () => {
-    if (!user) return router.push('login');
+    if (!user) return router.push('/login');
     const { uid } = user;
-    if (!votes.includes(uid)) {
-      const updatedVotes = [...votes, uid];
-      firebase.db
-        .collection('challenges')
-        .doc(id)
-        .update({ votes: updatedVotes });
-      setChallenge({ ...challenge, votes: updatedVotes });
+    if (votes.includes(uid)) return;
+    const updatedVotes = [...votes, uid];
+    firebase.db
+      .collection('challenges')
+      .doc(id)
+      .update({ votes: updatedVotes });
+    setChallenge({ ...challenge, votes: updatedVotes });
+  };
+  const handleChange = (e) => setMessage(e.target.value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { uid, displayName } = user;
+    const updatedComments = [...comments, { message, uid, displayName }];
+    firebase.db
+      .collection('challenges')
+      .doc(id)
+      .update({ comments: updatedComments });
+    setChallenge({ ...challenge, comments: updatedComments });
+    setMessage('');
+  };
+  const handleDelete = async () => {
+    if (!user) return router.push('/login');
+    if (creator.id !== user.uid) return router.push('/');
+    try {
+      await firebase.db.collection('challenges').doc(id).delete();
+      router.push('/');
+    } catch (error) {
+      console.log(error);
     }
   };
   return error ? (
@@ -76,6 +99,17 @@ const Challenge = () => {
           >
             {name}
           </h1>
+          <p>
+            Added by{' '}
+            <span
+              css={css`
+                font-weight: bold;
+              `}
+            >
+              {user && user.displayName === creator.name ? 'you' : creator.name}{' '}
+            </span>
+            {formatDistanceToNow(new Date(created))} ago
+          </p>
           <Container>
             <div>
               <img src={imgURL} />
@@ -83,9 +117,13 @@ const Challenge = () => {
               {user && (
                 <>
                   <h2>Add a Comment</h2>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Field>
-                      <input type='text' name='message' />
+                      <input
+                        type='text'
+                        value={message}
+                        onChange={handleChange}
+                      />
                     </Field>
                     <Submit type='submit' value='Add Comment' />
                   </form>
@@ -98,28 +136,37 @@ const Challenge = () => {
               >
                 Comments
               </h2>
-              <ul>
-                <li
-                  css={css`
-                    border: 1px solid #e1e1e1;
-                    padding: 2rem;
-                  `}
-                >
-                  <p>
-                    Added by{' '}
-                    <span
+              {comments.length ? (
+                <ul>
+                  {comments.map((comment, i) => (
+                    <li
+                      key={comment.uid - i}
                       css={css`
-                        font-weight: bold;
+                        border: 1px solid #e1e1e1;
+                        padding: 2rem;
                       `}
                     >
-                      {user && user.displayName === creator.name
-                        ? 'you'
-                        : creator.name}{' '}
-                    </span>
-                    {formatDistanceToNow(new Date(created))} ago
-                  </p>
-                </li>
-              </ul>
+                      <p>{comment.message}</p>
+                      <p>
+                        Written by{' '}
+                        <span
+                          css={css`
+                            font-weight: bold;
+                          `}
+                        >
+                          {user && user.displayName === comment.displayName
+                            ? 'you'
+                            : comment.displayName}
+                          {comment.displayName === creator.name &&
+                            ' (creator of this post)'}
+                        </span>
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <h4>No comments yet...seems a good time to add one,</h4>
+              )}
             </div>
             <aside>
               <Button href={url} target='_blank' bgColor='true'>
@@ -146,7 +193,9 @@ const Challenge = () => {
             </aside>
           </Container>
           {user && user.displayName === creator.name && (
-            <Button bgColor='true'>Delete Challenge</Button>
+            <Button onClick={handleDelete} bgColor='true'>
+              Delete Challenge
+            </Button>
           )}
         </div>
       </>

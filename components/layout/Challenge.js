@@ -96,7 +96,9 @@ const Challenge = ({ challenge }) => {
           <Comments>
             <div>
               <img src='/static/img/comment.png' />
-              <p>{comments.length} comments</p>
+              <p>
+                {comments.length} comment{comments.length !== 1 && 's'}
+              </p>
             </div>
           </Comments>
           <p>
@@ -107,7 +109,9 @@ const Challenge = ({ challenge }) => {
       </Details>
       <Votes>
         <div> &#9650; </div>
-        <p>{votes} upvotes</p>
+        <p>
+          {votes.length} upvote{votes.length !== 1 && 's'}
+        </p>
       </Votes>
     </Container>
   );
