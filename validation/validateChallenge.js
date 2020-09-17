@@ -1,14 +1,14 @@
-const validate = ({ source, url, name, description, code }) => {
+const validate = ({ source, url, name, description, explanation }) => {
   let errors = {};
   if (!source) errors.source = 'Source is required';
-  if (!url) {
-    errors.url = 'URL is required';
-  } else if (!/^(ftp|http|https):\/\/[^ "]+$/.test(url)) {
-    errors.url = 'Invalid URL';
+  if (!link) {
+    errors.link = 'URL is required';
+  } else if (!/^(ftp|http|https):\/\/[^ "]+$/.test(link)) {
+    errors.link = 'Invalid URL';
   }
   if (!name) errors.name = 'Name is required';
   if (!description) errors.description = 'Description is required';
-  if (!code) errors.code = 'Code is required';
+  if (!explanation) errors.explanation = 'Explanation is required';
   return errors;
 };
 

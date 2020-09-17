@@ -19,10 +19,10 @@ const NewChallenge = () => {
   const router = useRouter();
   const INITIAL_STATE = {
     source: '',
-    url: '',
+    link: '',
     name: '',
     description: '',
-    code: '',
+    explanation: '',
   };
   const {
     values,
@@ -31,19 +31,19 @@ const NewChallenge = () => {
     handleSubmit,
     handleBlur,
   } = useValidate(INITIAL_STATE, validateChallenge, newChallenge);
-  const { source, url, name, description, code } = values;
+  const { source, link, name, description, explanation } = values;
   async function newChallenge() {
     if (!user) return router.push('/login');
     const challenge = {
       source,
-      url,
+      link,
       name,
       description,
       imgURL,
-      code,
+      explanation,
       votes: [],
       comments: [],
-      created: Date.now(),
+      published: Date.now(),
       creator: {
         name: user.displayName,
         id: user.uid,
@@ -110,13 +110,13 @@ const NewChallenge = () => {
                 />
               </Field>
               <Field>
-                <label htmlFor='url'>URL</label>
+                <label htmlFor='link'>URL</label>
                 <input
-                  type='url'
-                  id='url'
-                  name='url'
+                  type='link'
+                  id='link'
+                  name='link'
                   placeholder='Link to this challenge'
-                  value={url}
+                  value={link}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   required
@@ -150,18 +150,7 @@ const NewChallenge = () => {
             </fieldset>
             <fieldset>
               <legend>Your Solution</legend>
-              <Field>
-                <label htmlFor='code'>Code</label>
-                <textarea
-                  id='code'
-                  name='code'
-                  value={code}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder='Paste your code here'
-                  required
-                />
-              </Field>
+              <p>Upload a screenshot of your code</p>
               <Field>
                 <label htmlFor='screenshot'>Screenshot</label>
                 <FileUploader
@@ -176,14 +165,26 @@ const NewChallenge = () => {
                   onProgress={handleProgress}
                 />
               </Field>
+              <Field>
+                <label htmlFor='explanation'>Explanation</label>
+                <textarea
+                  id='explanation'
+                  name='explanation'
+                  value={explanation}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder='Explain your thought process'
+                  required
+                />
+              </Field>
             </fieldset>
             {(Object.keys(errors).length || error) && (
               <Error>
                 {errors.source ||
-                  errors.url ||
+                  errors.link ||
                   errors.name ||
                   errors.description ||
-                  errors.code ||
+                  errors.explanation ||
                   error}
               </Error>
             )}

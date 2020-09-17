@@ -18,14 +18,14 @@ const Container = styled.div`
 `;
 
 const Challenge = () => {
+  const { firebase, user } = useContext(FirebaseContext);
+  const [challenge, setChallenge] = useState({});
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(false);
   const router = useRouter();
   const {
     query: { id },
   } = router;
-  const [challenge, setChallenge] = useState({});
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState(false);
-  const { firebase, user } = useContext(FirebaseContext);
   useEffect(() => {
     if (id) {
       const getChallenge = async () => {
@@ -44,12 +44,12 @@ const Challenge = () => {
   const {
     name,
     votes,
-    url,
+    link,
     source,
     imgURL,
     comments,
-    code,
-    created,
+    explanation,
+    published,
     creator,
   } = challenge;
   const handleVote = () => {
@@ -108,12 +108,13 @@ const Challenge = () => {
             >
               {user && user.displayName === creator.name ? 'you' : creator.name}{' '}
             </span>
-            {formatDistanceToNow(new Date(created))} ago
+            {formatDistanceToNow(new Date(published))} ago
           </p>
           <Container>
             <div>
               <img src={imgURL} />
-              <p>{code}</p>
+              <h2>Explanation</h2>
+              <p>{explanation}</p>
               {user && (
                 <>
                   <h2>Add a Comment</h2>
@@ -165,11 +166,11 @@ const Challenge = () => {
                   ))}
                 </ul>
               ) : (
-                <h4>No comments yet...seems a good time to add one,</h4>
+                <h4>No comments yet...seems a good time to add one</h4>
               )}
             </div>
             <aside>
-              <Button href={url} target='_blank' bgColor='true'>
+              <Button href={link} target='_blank' bgColor='true'>
                 View on {source}
               </Button>
               <div

@@ -78,7 +78,7 @@ const Challenge = ({ challenge }) => {
     imgURL,
     votes,
     comments,
-    created,
+    published,
     creator,
     id,
   } = challenge;
@@ -102,7 +102,7 @@ const Challenge = ({ challenge }) => {
             </div>
           </Comments>
           <p>
-            Published {formatDistanceToNow(new Date(created))} ago by{' '}
+            Published {formatDistanceToNow(new Date(published))} ago by{' '}
             {creator.name}
           </p>
         </div>
