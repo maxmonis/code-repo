@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '../../components/layout/Layout';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import { Field, InputSubmit } from '../../components/ui/Formulario';
+import { Field, Submit } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
 
 const Container = styled.div`
@@ -22,7 +22,7 @@ const Creator = styled.p`
   text-align: center;
 `;
 
-const Meal = () => {
+const Challenge = () => {
   return (
     <Layout>
       <>
@@ -41,17 +41,15 @@ const Meal = () => {
               <p>ago by: Someone from Somewhere</p>
               <img />
               <p>Description</p>
-              {usuario && (
-                <>
-                  <h2>Add a Comment</h2>
-                  <form>
-                    <Field>
-                      <input type='text' name='message' />
-                    </Field>
-                    <InputSubmit type='submit' value='Add Comment' />
-                  </form>
-                </>
-              )}
+              <>
+                <h2>Add a Comment</h2>
+                <form>
+                  <Field>
+                    <input type='text' name='message' />
+                  </Field>
+                  <Submit type='submit' value='Add Comment' />
+                </form>
+              </>
               <h2
                 css={css`
                   margin: 2rem 0;
@@ -103,11 +101,11 @@ const Meal = () => {
               </div>
             </aside>
           </Container>
-          <Button>Delete Meal</Button>
+          <Button>Delete Challenge</Button>
         </div>
       </>
     </Layout>
   );
 };
 
-export default Meal;
+export default Challenge;

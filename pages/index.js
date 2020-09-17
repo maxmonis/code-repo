@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
+import Challenge from '../components/layout/Challenge';
 import { FirebaseContext } from '../firebase';
 
 const Index = () => {
@@ -25,9 +26,11 @@ const Index = () => {
     <div>
       <Layout>
         <div className='container'>
-          {challenges.map((challenge) => (
-            <p>{JSON.stringify(challenge)}</p>
-          ))}
+          <ul>
+            {challenges.map((challenge) => (
+              <Challenge key={challenge.id} challenge={challenge} />
+            ))}
+          </ul>
         </div>
       </Layout>
     </div>

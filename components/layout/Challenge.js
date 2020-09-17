@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-const Challenge = styled.li`
+const Container = styled.li`
   padding: 4rem;
   display: flex;
   justify-content: space-between;
@@ -70,33 +71,45 @@ const Votes = styled.div`
   }
 `;
 
-const ChallengeDetails = () => {
+const Challenge = ({ challenge }) => {
+  const {
+    name,
+    description,
+    code,
+    imgURL,
+    votes,
+    comments,
+    created,
+    id,
+  } = challenge;
   return (
-    <Challenge>
+    <Container>
       <Details>
         <div>
-          <Image />
+          <Image src={imgURL} />
         </div>
         <div>
-          <Link>
-            <Title>Name</Title>
+          <Link href='/challenges/[id]' as={`/challenges/${id}`}>
+            <Title>{name}</Title>
           </Link>
-          <Text>Description</Text>
+          <Text>{description}</Text>
+          <Title>Solution</Title>
+          <Text>{code}</Text>
           <Comments>
             <div>
               <img src='/static/img/comment.png' />
-              <p>Comments go here</p>
+              <p>{comments.length} comments</p>
             </div>
           </Comments>
-          <p>Published some time ago </p>
+          <p>Published {formatDistanceToNow(new Date(created))} ago</p>
         </div>
       </Details>
       <Votes>
         <div> &#9650; </div>
-        <p>Votes go here</p>
+        <p>{votes} upvotes</p>
       </Votes>
-    </Challenge>
+    </Container>
   );
 };
 
-export default ChallengeDetails;
+export default Challenge;
