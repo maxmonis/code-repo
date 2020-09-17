@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import FileUploader from 'react-firebase-file-uploader';
 import { css } from '@emotion/core';
 import Layout from '../components/layout/Layout';
+import Error404 from '../components/layout/404';
 import { Form, Field, Submit, Error } from '../components/ui/Form';
 import useValidate from '../hooks/useValidate';
 import validateChallenge from '../validation/validateChallenge';
@@ -43,6 +44,10 @@ const NewChallenge = () => {
       votes: 0,
       comments: [],
       created: Date.now(),
+      creator: {
+        name: user.displayName,
+        id: user.uid,
+      },
     };
     try {
       firebase.db.collection('challenges').add(challenge);
@@ -74,7 +79,9 @@ const NewChallenge = () => {
         setImgURL(url);
       });
   };
-  return (
+  return !user ? (
+    <Error404 />
+  ) : (
     <div>
       <Layout>
         <div className='container'>

@@ -7,6 +7,7 @@ import { Field, Submit } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
 import { useRouter } from 'next/router';
 import { FirebaseContext } from '../../firebase';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const Container = styled.div`
   @media (min-width: 768px) {
@@ -14,15 +15,6 @@ const Container = styled.div`
     grid-template-columns: 2fr 1fr;
     column-gap: 2rem;
   }
-`;
-const Creator = styled.p`
-  padding: 0.5rem 2rem;
-  background-color: #da552f;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: bold;
-  display: inline-block;
-  text-align: center;
 `;
 
 const Challenge = () => {
@@ -32,23 +24,32 @@ const Challenge = () => {
   } = router;
   const [challenge, setChallenge] = useState({});
   const [error, setError] = useState(false);
-  const { firebase } = useContext(FirebaseContext);
+  const { firebase, user } = useContext(FirebaseContext);
   useEffect(() => {
-    const getChallenge = async () => {
-      try {
-        const product = await firebase.db
-          .collection('challenges')
-          .doc(id)
-          .get();
-        console.log(product.data());
-        setChallenge(product.data());
-      } catch (error) {
-        setError(true);
-      }
-    };
-    getChallenge();
+    if (id) {
+      const getChallenge = async () => {
+        const query = await firebase.db.collection('challenges').doc(id);
+        const challenge = await query.get();
+        if (challenge.exists) {
+          setChallenge(challenge.data());
+        } else {
+          setError(true);
+        }
+      };
+      getChallenge();
+    }
   }, [id]);
-  const { name, votes, imgURL, code } = challenge;
+  if (!error && !Object.keys(challenge).length) return 'Loading...';
+  const {
+    name,
+    votes,
+    url,
+    source,
+    imgURL,
+    code,
+    created,
+    creator,
+  } = challenge;
   return error ? (
     <Error />
   ) : (
@@ -67,15 +68,17 @@ const Challenge = () => {
             <div>
               <img src={imgURL} />
               <p>{code}</p>
-              <>
-                <h2>Add a Comment</h2>
-                <form>
-                  <Field>
-                    <input type='text' name='message' />
-                  </Field>
-                  <Submit type='submit' value='Add Comment' />
-                </form>
-              </>
+              {user && (
+                <>
+                  <h2>Add a Comment</h2>
+                  <form>
+                    <Field>
+                      <input type='text' name='message' />
+                    </Field>
+                    <Submit type='submit' value='Add Comment' />
+                  </form>
+                </>
+              )}
               <h2
                 css={css`
                   margin: 2rem 0;
@@ -90,24 +93,25 @@ const Challenge = () => {
                     padding: 2rem;
                   `}
                 >
-                  <p>Message</p>
                   <p>
-                    Written by:
+                    Added by{' '}
                     <span
                       css={css`
                         font-weight: bold;
                       `}
                     >
-                      Name
+                      {user && user.displayName === creator.name
+                        ? 'you'
+                        : creator.name}{' '}
                     </span>
+                    {formatDistanceToNow(new Date(created))} ago
                   </p>
-                  <Creator>You are creator</Creator>
                 </li>
               </ul>
             </div>
             <aside>
-              <Button target='_blank' bgColor='true'>
-                Visit Website
+              <Button href={url} target='_blank' bgColor='true'>
+                View on {source}
               </Button>
               <div
                 css={css`
@@ -121,11 +125,13 @@ const Challenge = () => {
                 >
                   {votes} upvotes
                 </p>
-                <Button>Like</Button>
+                {user && <Button>Like</Button>}
               </div>
             </aside>
           </Container>
-          <Button>Delete Challenge</Button>
+          {user && user.displayName === creator.name && (
+            <Button bgColor='true'>Delete Challenge</Button>
+          )}
         </div>
       </>
     </Layout>

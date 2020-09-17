@@ -72,7 +72,16 @@ const Votes = styled.div`
 `;
 
 const Challenge = ({ challenge }) => {
-  const { name, description, imgURL, votes, comments, created, id } = challenge;
+  const {
+    name,
+    description,
+    imgURL,
+    votes,
+    comments,
+    created,
+    creator,
+    id,
+  } = challenge;
   return (
     <Container>
       <Details>
@@ -90,7 +99,10 @@ const Challenge = ({ challenge }) => {
               <p>{comments.length} comments</p>
             </div>
           </Comments>
-          <p>Published {formatDistanceToNow(new Date(created))} ago</p>
+          <p>
+            Published {formatDistanceToNow(new Date(created))} ago by{' '}
+            {creator.name}
+          </p>
         </div>
       </Details>
       <Votes>
