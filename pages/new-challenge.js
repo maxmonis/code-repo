@@ -13,10 +13,11 @@ const NewChallenge = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const INITIAL_STATE = {
-    name: '',
     source: '',
     url: '',
+    name: '',
     description: '',
+    code: '',
   };
   const {
     values,
@@ -25,14 +26,15 @@ const NewChallenge = () => {
     handleSubmit,
     handleBlur,
   } = useValidate(INITIAL_STATE, validateChallenge, newChallenge);
-  const { name, source, url, description } = values;
+  const { source, url, name, description, code } = values;
   async function newChallenge() {
     if (!user) return router.push('/login');
     const challenge = {
-      name,
       source,
       url,
+      name,
       description,
+      code,
       votes: 0,
       comments: [],
       created: Date.now(),
@@ -60,24 +62,11 @@ const NewChallenge = () => {
             <fieldset>
               <legend>General Information</legend>
               <Field>
-                <label htmlFor='name'>Name</label>
-                <input
-                  type='text'
-                  id='name'
-                  placeholder='Challenge Name'
-                  name='name'
-                  value={name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  required
-                />
-              </Field>
-              <Field>
                 <label htmlFor='source'>Source</label>
                 <input
                   type='text'
                   id='source'
-                  placeholder='Name of Website'
+                  placeholder='Name of host website'
                   name='source'
                   value={source}
                   onChange={handleChange}
@@ -91,7 +80,7 @@ const NewChallenge = () => {
                   type='url'
                   id='url'
                   name='url'
-                  placeholder='Link to Website'
+                  placeholder='Link to this challenge'
                   value={url}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -99,17 +88,18 @@ const NewChallenge = () => {
                 />
               </Field>
               <Field>
-                <label htmlFor='solution'>Solution</label>
-                <FileUploader
-                  accept='image/*'
-                  id='solution'
-                  name='solution'
-                  randomizeFilename
+                <label htmlFor='name'>Name</label>
+                <input
+                  type='text'
+                  id='name'
+                  placeholder='Challenge name'
+                  name='name'
+                  value={name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
                 />
               </Field>
-            </fieldset>
-            <fieldset>
-              <legend>About Your Solution</legend>
               <Field>
                 <label htmlFor='description'>Description</label>
                 <textarea
@@ -118,16 +108,42 @@ const NewChallenge = () => {
                   value={description}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  placeholder='Description of the challenge'
                   required
+                />
+              </Field>
+            </fieldset>
+            <fieldset>
+              <legend>Your Solution</legend>
+              <Field>
+                <label htmlFor='code'>Code</label>
+                <textarea
+                  id='code'
+                  name='code'
+                  value={code}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder='Paste your code here'
+                  required
+                />
+              </Field>
+              <Field>
+                <label htmlFor='screenshot'>Screenshot</label>
+                <FileUploader
+                  accept='image/*'
+                  id='screenshot'
+                  name='screenshot'
+                  randomizeFilename
                 />
               </Field>
             </fieldset>
             {(Object.keys(errors).length || error) && (
               <Error>
-                {errors.name ||
-                  errors.source ||
+                {errors.source ||
                   errors.url ||
+                  errors.name ||
                   errors.description ||
+                  errors.code ||
                   error}
               </Error>
             )}

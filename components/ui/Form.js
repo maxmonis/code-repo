@@ -26,7 +26,7 @@ export const Field = styled.div`
     padding: 1rem;
   }
   textarea {
-    height: 400px;
+    height: 200px;
   }
 `;
 
