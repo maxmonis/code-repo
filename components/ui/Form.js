@@ -26,11 +26,11 @@ export const Field = styled.div`
     padding: 1rem;
   }
   textarea {
-    height: 400px;
+    height: 200px;
   }
 `;
 
-export const InputSubmit = styled.input`
+export const Submit = styled.input`
   background-color: var(--orange);
   width: 100%;
   padding: 1.5rem;

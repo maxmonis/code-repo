@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import { css } from '@emotion/core';
 import Layout from '../components/layout/Layout';
-import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
+import { Form, Field, Submit, Error } from '../components/ui/Form';
 import useValidate from '../hooks/useValidate';
 import validateAccount from '../validation/validateAccount';
 import firebase from '../firebase';
@@ -43,7 +43,7 @@ const CreateAccount = () => {
           >
             Create New Account
           </h1>
-          <Form onSubmit={handleSubmit} noValidate>
+          <Form onSubmit={handleSubmit}>
             <Field>
               <label htmlFor='name'>Name</label>
               <input
@@ -54,9 +54,9 @@ const CreateAccount = () => {
                 value={name}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
               />
             </Field>
-            {errors.name && <Error>{errors.name}</Error>}
             <Field>
               <label htmlFor='email'>Email</label>
               <input
@@ -67,9 +67,9 @@ const CreateAccount = () => {
                 value={email}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
               />
             </Field>
-            {errors.email && <Error>{errors.email}</Error>}
             <Field>
               <label htmlFor='password'>Password</label>
               <input
@@ -80,11 +80,16 @@ const CreateAccount = () => {
                 value={password}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
+                minLength='6'
               />
             </Field>
-            {errors.password && <Error>{errors.password}</Error>}
-            {error && <Error>{error}</Error>}
-            <InputSubmit type='submit' value='Create Account' />
+            {(Object.keys(errors).length || error) && (
+              <Error>
+                {errors.name || errors.email || errors.password || error}
+              </Error>
+            )}
+            <Submit type='submit' value='Create Account' />
           </Form>
         </div>
       </Layout>

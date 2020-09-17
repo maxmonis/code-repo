@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../../components/layout/Layout';
+import Error from '../../components/layout/404';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import { Field, InputSubmit } from '../../components/ui/Formulario';
+import { Field, Submit } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
+import { useRouter } from 'next/router';
+import { FirebaseContext } from '../../firebase';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const Container = styled.div`
   @media (min-width: 768px) {
@@ -12,18 +16,78 @@ const Container = styled.div`
     column-gap: 2rem;
   }
 `;
-const Creator = styled.p`
-  padding: 0.5rem 2rem;
-  background-color: #da552f;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: bold;
-  display: inline-block;
-  text-align: center;
-`;
 
-const Meal = () => {
-  return (
+const Challenge = () => {
+  const { firebase, user } = useContext(FirebaseContext);
+  const [challenge, setChallenge] = useState({});
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(false);
+  const router = useRouter();
+  const {
+    query: { id },
+  } = router;
+  useEffect(() => {
+    if (id) {
+      const getChallenge = async () => {
+        const query = await firebase.db.collection('challenges').doc(id);
+        const challenge = await query.get();
+        if (challenge.exists) {
+          setChallenge(challenge.data());
+        } else {
+          setError(true);
+        }
+      };
+      getChallenge();
+    }
+  }, [id]);
+  if (!error && !Object.keys(challenge).length) return 'Loading...';
+  const {
+    name,
+    votes,
+    link,
+    source,
+    imgURL,
+    comments,
+    explanation,
+    published,
+    creator,
+  } = challenge;
+  const handleVote = () => {
+    if (!user) return router.push('/login');
+    const { uid } = user;
+    if (votes.includes(uid)) return;
+    const updatedVotes = [...votes, uid];
+    firebase.db
+      .collection('challenges')
+      .doc(id)
+      .update({ votes: updatedVotes });
+    setChallenge({ ...challenge, votes: updatedVotes });
+  };
+  const handleChange = (e) => setMessage(e.target.value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { uid, displayName } = user;
+    const updatedComments = [...comments, { message, uid, displayName }];
+    firebase.db
+      .collection('challenges')
+      .doc(id)
+      .update({ comments: updatedComments });
+    setChallenge({ ...challenge, comments: updatedComments });
+    setMessage('');
+  };
+  const handleDelete = async () => {
+    if (!user) return router.push('/login');
+    if (creator.id !== user.uid) return router.push('/');
+    try {
+      await firebase.db.collection('challenges').doc(id).delete();
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return error ? (
+    <Error />
+  ) : (
     <Layout>
       <>
         <div className='container'>
@@ -33,22 +97,36 @@ const Meal = () => {
               margin-top: 5rem;
             `}
           >
-            Name
+            {name}
           </h1>
+          <p>
+            Added by{' '}
+            <span
+              css={css`
+                font-weight: bold;
+              `}
+            >
+              {user && user.displayName === creator.name ? 'you' : creator.name}{' '}
+            </span>
+            {formatDistanceToNow(new Date(published))} ago
+          </p>
           <Container>
             <div>
-              <p>Published: a while</p>
-              <p>ago by: Someone from Somewhere</p>
-              <img />
-              <p>Description</p>
-              {usuario && (
+              <img src={imgURL} />
+              <h2>Explanation</h2>
+              <p>{explanation}</p>
+              {user && (
                 <>
                   <h2>Add a Comment</h2>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Field>
-                      <input type='text' name='message' />
+                      <input
+                        type='text'
+                        value={message}
+                        onChange={handleChange}
+                      />
                     </Field>
-                    <InputSubmit type='submit' value='Add Comment' />
+                    <Submit type='submit' value='Add Comment' />
                   </form>
                 </>
               )}
@@ -59,33 +137,41 @@ const Meal = () => {
               >
                 Comments
               </h2>
-              <ul>
-                <li
-                  css={css`
-                    border: 1px solid #e1e1e1;
-                    padding: 2rem;
-                  `}
-                >
-                  <p>Message</p>
-                  <p>
-                    Written by:
-                    <span
+              {comments.length ? (
+                <ul>
+                  {comments.map((comment, i) => (
+                    <li
+                      key={comment.uid - i}
                       css={css`
-                        font-weight: bold;
+                        border: 1px solid #e1e1e1;
+                        padding: 2rem;
                       `}
                     >
-                      Name
-                    </span>
-                  </p>
-                  <Creator>You are creator</Creator>
-                </li>
-                )
-              </ul>
-              )
+                      <p>{comment.message}</p>
+                      <p>
+                        Written by{' '}
+                        <span
+                          css={css`
+                            font-weight: bold;
+                          `}
+                        >
+                          {user && user.displayName === comment.displayName
+                            ? 'you'
+                            : comment.displayName}
+                          {comment.displayName === creator.name &&
+                            ' (creator of this post)'}
+                        </span>
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <h4>No comments yet...seems a good time to add one</h4>
+              )}
             </div>
             <aside>
-              <Button target='_blank' bgColor='true'>
-                Visit Website
+              <Button href={link} target='_blank' bgColor='true'>
+                View on {source}
               </Button>
               <div
                 css={css`
@@ -97,17 +183,25 @@ const Meal = () => {
                     text-align: center;
                   `}
                 >
-                  Likes go here
+                  {votes.length} upvote{votes.length !== 1 && 's'}
                 </p>
-                <Button>Like</Button>
+                {user && (
+                  <Button onClick={handleVote} bgColor='true'>
+                    Upvote
+                  </Button>
+                )}
               </div>
             </aside>
           </Container>
-          <Button>Delete Meal</Button>
+          {user && user.displayName === creator.name && (
+            <Button onClick={handleDelete} bgColor='true'>
+              Delete Challenge
+            </Button>
+          )}
         </div>
       </>
     </Layout>
   );
 };
 
-export default Meal;
+export default Challenge;

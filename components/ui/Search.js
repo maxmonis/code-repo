@@ -2,12 +2,12 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
-const InputText = styled.input`
+const Text = styled.input`
   border: 1px solid var(--grey3);
   padding: 1rem;
   min-width: 300px;
 `;
-const InputSubmit = styled.button`
+const Submit = styled.button`
   height: 3rem;
   width: 3rem;
   display: block;
@@ -32,8 +32,8 @@ const Search = () => {
         position: relative;
       `}
     >
-      <InputText type='text' placeholder='Search...' />
-      <InputSubmit type='submit'>Search</InputSubmit>
+      <Text type='text' placeholder='Search...' />
+      <Submit type='submit'>Search</Submit>
     </form>
   );
 };
