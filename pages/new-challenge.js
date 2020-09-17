@@ -11,6 +11,10 @@ import { FirebaseContext } from '../firebase';
 const NewChallenge = () => {
   const { user, firebase } = useContext(FirebaseContext);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [imgName, setImgName] = useState('');
+  const [imgURL, setImgURL] = useState('');
   const router = useRouter();
   const INITIAL_STATE = {
     source: '',
@@ -34,6 +38,7 @@ const NewChallenge = () => {
       url,
       name,
       description,
+      imgURL,
       code,
       votes: 0,
       comments: [],
@@ -41,11 +46,34 @@ const NewChallenge = () => {
     };
     try {
       firebase.db.collection('challenges').add(challenge);
+      return router.push('/');
     } catch ({ message }) {
       console.error('Challenge could not be created', message);
       setError(message);
     }
   }
+  const handleUploadStart = () => {
+    setProgress(0);
+    setLoading(true);
+  };
+  const handleProgress = (progress) => setProgress({ progress });
+  const handleUploadError = (error) => {
+    setError(error.message);
+    console.error(error);
+  };
+  const handleUploadSuccess = (name) => {
+    setProgress(100);
+    setLoading(false);
+    setImgName(name);
+    firebase.storage
+      .ref('challenges')
+      .child(imgName)
+      .getDownloadURL()
+      .then((url) => {
+        console.log(url);
+        setImgURL(url);
+      });
+  };
   return (
     <div>
       <Layout>
@@ -134,6 +162,11 @@ const NewChallenge = () => {
                   id='screenshot'
                   name='screenshot'
                   randomizeFilename
+                  storageRef={firebase.storage.ref('challenges')}
+                  onUploadStart={handleUploadStart}
+                  onUploadError={handleUploadError}
+                  onUploadSuccess={handleUploadSuccess}
+                  onProgress={handleProgress}
                 />
               </Field>
             </fieldset>
