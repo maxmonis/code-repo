@@ -21,7 +21,10 @@ const Challenge = () => {
   const { firebase, user } = useContext(FirebaseContext);
   const [challenge, setChallenge] = useState({});
   const [message, setMessage] = useState('');
+  const [confirmation, setConfirmation] = useState('');
   const [error, setError] = useState(false);
+  const [displayForm, setDisplayForm] = useState(false);
+  const toggle = () => setDisplayForm(!displayForm);
   const router = useRouter();
   const {
     query: { id },
@@ -52,6 +55,7 @@ const Challenge = () => {
     published,
     creator,
   } = challenge;
+  const isCreator = () => user && user.uid === creator.id;
   const handleVote = () => {
     if (!user) return router.push('/login');
     const { uid } = user;
@@ -75,9 +79,13 @@ const Challenge = () => {
     setChallenge({ ...challenge, comments: updatedComments });
     setMessage('');
   };
+  const namesMatch = () =>
+    confirmation.toLowerCase().replace(/ /g, '') ===
+    name.toLowerCase().replace(/ /g, '');
   const handleDelete = async () => {
+    if (!namesMatch()) return;
     if (!user) return router.push('/login');
-    if (creator.id !== user.uid) return router.push('/');
+    if (!isCreator()) return router.push('/');
     try {
       await firebase.db.collection('challenges').doc(id).delete();
       router.push('/');
@@ -85,6 +93,7 @@ const Challenge = () => {
       console.log(error);
     }
   };
+  const handleConfirmation = (e) => setConfirmation(e.target.value);
   return error ? (
     <Error />
   ) : (
@@ -106,7 +115,7 @@ const Challenge = () => {
                 font-weight: bold;
               `}
             >
-              {user && user.displayName === creator.name ? 'you' : creator.name}{' '}
+              {isCreator() ? 'you' : creator.name}{' '}
             </span>
             {formatDistanceToNow(new Date(published))} ago
           </p>
@@ -192,10 +201,35 @@ const Challenge = () => {
                   </Button>
                 )}
               </div>
-              {user && user.displayName === creator.name && (
-                <Button onClick={handleDelete} bgColor='true'>
+              {isCreator() && !displayForm && (
+                <Button onClick={toggle} bgColor='true'>
                   Delete Challenge
                 </Button>
+              )}
+              {isCreator() && displayForm && (
+                <div
+                  css={css`
+                    text-align: center;
+                  `}
+                >
+                  <h3>Permanently delete {name}?</h3>
+                  <Field>
+                    <input
+                      type='text'
+                      placeholder='Confirm name of challenge to be deleted'
+                      value={confirmation}
+                      onChange={handleConfirmation}
+                    />
+                  </Field>
+                  <Button onClick={toggle} bgColor='true'>
+                    Cancel
+                  </Button>
+                  {namesMatch() && (
+                    <Button onClick={handleDelete} bgColor='true'>
+                      I understand the consequences, delete {name}
+                    </Button>
+                  )}
+                </div>
               )}
             </aside>
           </Container>
