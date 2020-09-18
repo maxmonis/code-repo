@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Router from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
@@ -29,6 +30,7 @@ const Logo = styled.a`
 const Header = () => {
   const { user, firebase } = useContext(FirebaseContext);
   const handleLogout = () => {
+    Router.push('/login');
     firebase.logout();
   };
   return (
