@@ -15,7 +15,6 @@ const Login = () => {
   };
   const {
     values,
-    errors,
     handleChange,
     handleSubmit,
     handleBlur,
@@ -70,9 +69,7 @@ const Login = () => {
                   minLength='6'
                 />
               </Field>
-              {(Object.keys(errors).length || error) && (
-                <Error>{errors.email || errors.password || error}</Error>
-              )}
+              {error && <Error>{error}</Error>}
               <Submit type='submit' value='Access Account' />
             </fieldset>
           </Form>

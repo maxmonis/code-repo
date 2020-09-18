@@ -16,7 +16,6 @@ const CreateAccount = () => {
   };
   const {
     values,
-    errors,
     handleChange,
     handleSubmit,
     handleBlur,
@@ -85,11 +84,7 @@ const CreateAccount = () => {
                   minLength='6'
                 />
               </Field>
-              {(Object.keys(errors).length || error) && (
-                <Error>
-                  {errors.name || errors.email || errors.password || error}
-                </Error>
-              )}
+              {error && <Error>{error}</Error>}
               <Submit type='submit' value='Create Account' />
             </fieldset>
           </Form>

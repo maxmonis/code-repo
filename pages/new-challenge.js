@@ -14,7 +14,6 @@ const Container = styled.div`
   @media (min-width: 1024px) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 1rem;
   }
   fieldset {
     min-width: 90%;
@@ -38,7 +37,6 @@ const NewChallenge = () => {
   };
   const {
     values,
-    errors,
     handleChange,
     handleSubmit,
     handleBlur,
@@ -114,6 +112,19 @@ const NewChallenge = () => {
               <fieldset>
                 <legend>General Information</legend>
                 <Field>
+                  <label htmlFor='name'>Name</label>
+                  <input
+                    type='text'
+                    id='name'
+                    placeholder='Challenge name'
+                    name='name'
+                    value={name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                  />
+                </Field>
+                <Field>
                   <label htmlFor='source'>Source</label>
                   <input
                     type='text'
@@ -134,19 +145,6 @@ const NewChallenge = () => {
                     name='link'
                     placeholder='Link to this challenge'
                     value={link}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                  />
-                </Field>
-                <Field>
-                  <label htmlFor='name'>Name</label>
-                  <input
-                    type='text'
-                    id='name'
-                    placeholder='Challenge name'
-                    name='name'
-                    value={name}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     required
@@ -197,16 +195,7 @@ const NewChallenge = () => {
                 <p>Upload a screenshot of your code (.jpg)</p>
               </fieldset>
             </Container>
-            {(Object.keys(errors).length || error) && (
-              <Error>
-                {errors.source ||
-                  errors.link ||
-                  errors.name ||
-                  errors.description ||
-                  errors.explanation ||
-                  error}
-              </Error>
-            )}
+            {error && <Error>{error}</Error>}
             <Submit type='submit' value='Publish Challenge' />
           </Form>
         </div>
