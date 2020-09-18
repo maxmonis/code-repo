@@ -44,52 +44,54 @@ const CreateAccount = () => {
             Create New Account
           </h1>
           <Form onSubmit={handleSubmit}>
-            <Field>
-              <label htmlFor='name'>Name</label>
-              <input
-                type='text'
-                id='name'
-                placeholder='Your Name'
-                name='name'
-                value={name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-              />
-            </Field>
-            <Field>
-              <label htmlFor='email'>Email</label>
-              <input
-                type='email'
-                id='email'
-                placeholder='Your Email'
-                name='email'
-                value={email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-              />
-            </Field>
-            <Field>
-              <label htmlFor='password'>Password</label>
-              <input
-                type='password'
-                id='password'
-                placeholder='Your Password'
-                name='password'
-                value={password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-                minLength='6'
-              />
-            </Field>
-            {(Object.keys(errors).length || error) && (
-              <Error>
-                {errors.name || errors.email || errors.password || error}
-              </Error>
-            )}
-            <Submit type='submit' value='Create Account' />
+            <fieldset>
+              <Field>
+                <label htmlFor='name'>Name</label>
+                <input
+                  type='text'
+                  id='name'
+                  placeholder='Your Name'
+                  name='name'
+                  value={name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+              </Field>
+              <Field>
+                <label htmlFor='email'>Email</label>
+                <input
+                  type='email'
+                  id='email'
+                  placeholder='Your Email'
+                  name='email'
+                  value={email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+              </Field>
+              <Field>
+                <label htmlFor='password'>Password</label>
+                <input
+                  type='password'
+                  id='password'
+                  placeholder='Your Password'
+                  name='password'
+                  value={password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                  minLength='6'
+                />
+              </Field>
+              {(Object.keys(errors).length || error) && (
+                <Error>
+                  {errors.name || errors.email || errors.password || error}
+                </Error>
+              )}
+              <Submit type='submit' value='Create Account' />
+            </fieldset>
           </Form>
         </div>
       </Layout>

@@ -42,37 +42,39 @@ const Login = () => {
             Log In To Account
           </h1>
           <Form onSubmit={handleSubmit}>
-            <Field>
-              <label htmlFor='email'>Email</label>
-              <input
-                type='email'
-                id='email'
-                placeholder='Your Email'
-                name='email'
-                value={email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-              />
-            </Field>
-            <Field>
-              <label htmlFor='password'>Password</label>
-              <input
-                type='password'
-                id='password'
-                placeholder='Your Password'
-                name='password'
-                value={password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-                minLength='6'
-              />
-            </Field>
-            {(Object.keys(errors).length || error) && (
-              <Error>{errors.email || errors.password || error}</Error>
-            )}
-            <Submit type='submit' value='Access Account' />
+            <fieldset>
+              <Field>
+                <label htmlFor='email'>Email</label>
+                <input
+                  type='email'
+                  id='email'
+                  placeholder='Your Email'
+                  name='email'
+                  value={email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+              </Field>
+              <Field>
+                <label htmlFor='password'>Password</label>
+                <input
+                  type='password'
+                  id='password'
+                  placeholder='Your Password'
+                  name='password'
+                  value={password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                  minLength='6'
+                />
+              </Field>
+              {(Object.keys(errors).length || error) && (
+                <Error>{errors.email || errors.password || error}</Error>
+              )}
+              <Submit type='submit' value='Access Account' />
+            </fieldset>
           </Form>
         </div>
       </Layout>
