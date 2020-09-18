@@ -123,28 +123,14 @@ const Challenge = () => {
             <div>
               <h2>Code</h2>
               <img src={imgURL} />
-              {user && (
-                <>
-                  <h2>Add a Comment</h2>
-                  <form onSubmit={handleSubmit}>
-                    <Field>
-                      <input
-                        type='text'
-                        value={message}
-                        onChange={handleChange}
-                      />
-                    </Field>
-                    <Submit type='submit' value='Add Comment' />
-                  </form>
-                </>
-              )}
-              <h2
-                css={css`
-                  margin: 2rem 0;
-                `}
-              >
-                Comments
-              </h2>
+              <h2>Explanation</h2>
+              <p>{explanation}</p>
+              <Button href={link} target='_blank' bgColor='true'>
+                View on {source}
+              </Button>
+            </div>
+            <aside>
+              <h2>Comments</h2>
               {comments.length ? (
                 <ul>
                   {comments.map((comment, i) => (
@@ -175,14 +161,28 @@ const Challenge = () => {
                 </ul>
               ) : (
                 <h4>No comments yet...seems a good time to add one</h4>
+              )}{' '}
+              {user && (
+                <>
+                  <h2
+                    css={css`
+                      margin: 2rem 0;
+                    `}
+                  >
+                    Add a Comment
+                  </h2>
+                  <form onSubmit={handleSubmit}>
+                    <Field>
+                      <input
+                        type='text'
+                        value={message}
+                        onChange={handleChange}
+                      />
+                    </Field>
+                    <Submit type='submit' value='Add Comment' />
+                  </form>
+                </>
               )}
-            </div>
-            <aside>
-              <h2>Explanation</h2>
-              <p>{explanation}</p>
-              <Button href={link} target='_blank' bgColor='true'>
-                View on {source}
-              </Button>
               <div
                 css={css`
                   margin-top: 5rem;
@@ -202,14 +202,14 @@ const Challenge = () => {
                 )}
               </div>
               {isCreator() && !displayForm && (
-                <Button onClick={toggle} bgColor='true'>
-                  Delete Challenge
-                </Button>
+                <Button onClick={toggle}>Delete Challenge</Button>
               )}
               {isCreator() && displayForm && (
                 <div
                   css={css`
                     text-align: center;
+                    border: 2px solid #e1e1e1;
+                    padding: 1rem;
                   `}
                 >
                   <h3>Permanently delete {name}?</h3>
@@ -225,7 +225,7 @@ const Challenge = () => {
                     Cancel
                   </Button>
                   {namesMatch() && (
-                    <Button onClick={handleDelete} bgColor='true'>
+                    <Button onClick={handleDelete}>
                       I understand the consequences, delete {name}
                     </Button>
                   )}
