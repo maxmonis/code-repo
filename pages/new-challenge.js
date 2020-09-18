@@ -75,8 +75,12 @@ const NewChallenge = () => {
       .child(imgName)
       .getDownloadURL()
       .then((url) => {
-        console.log(url);
-        setImgURL(url);
+        try {
+          console.log(url);
+          setImgURL(url);
+        } catch (error) {
+          console.log(error);
+        }
       });
   };
   return !user ? (
