@@ -75,8 +75,12 @@ const NewChallenge = () => {
       .child(imgName)
       .getDownloadURL()
       .then((url) => {
-        console.log(url);
-        setImgURL(url);
+        try {
+          console.log(url);
+          setImgURL(url);
+        } catch (error) {
+          console.log(error);
+        }
       });
   };
   return !user ? (
@@ -112,7 +116,7 @@ const NewChallenge = () => {
               <Field>
                 <label htmlFor='link'>URL</label>
                 <input
-                  type='link'
+                  type='url'
                   id='link'
                   name='link'
                   placeholder='Link to this challenge'

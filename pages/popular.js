@@ -3,8 +3,8 @@ import Layout from '../components/layout/Layout';
 import Challenge from '../components/layout/Challenge';
 import useChallenges from '../hooks/useChallenges';
 
-const Index = () => {
-  const challenges = useChallenges('published');
+const Popular = () => {
+  const challenges = useChallenges('votes');
   return (
     <div>
       <Layout>
@@ -20,4 +20,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Popular;

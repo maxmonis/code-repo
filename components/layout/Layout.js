@@ -53,6 +53,14 @@ const Layout = ({ children }) => {
           img {
             max-width: 100%;
           }
+          div {
+            &.container {
+              max-width: 1200px;
+              width: 95%;
+              padding: 5rem 0;
+              margin: 0 auto;
+            }
+          }
         `}
       />
       <Head>
@@ -67,7 +75,6 @@ const Layout = ({ children }) => {
           href='https://fonts.googleapis.com/css?family=PT+Sans:400,700|Roboto+Slab:400,700&display=swap'
           rel='stylesheet'
         />
-        <link href='/static/css/app.css' rel='stylesheet' />
       </Head>
       <Header />
       <main>{children}</main>

@@ -1,20 +1,21 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import Link from 'next/link';
+import Layout from './Layout';
 
-const Error = () => {
+const Error = ({ message }) => {
   return (
-    <div className='container'>
-      <h1
+    <Layout>
+      <div
         css={css`
           margin-top: 5rem;
           text-align: center;
         `}
       >
-        404: Something went wrong, sorry about that!
-      </h1>
-      <Link href='/'>Return to homepage</Link>
-    </div>
+        <h1>404: {message || 'Something went wrong, sorry about that!'}</h1>
+        <Link href='/'>Return to homepage</Link>
+      </div>
+    </Layout>
   );
 };
 

@@ -112,9 +112,8 @@ const Challenge = () => {
           </p>
           <Container>
             <div>
+              <h2>Code</h2>
               <img src={imgURL} />
-              <h2>Explanation</h2>
-              <p>{explanation}</p>
               {user && (
                 <>
                   <h2>Add a Comment</h2>
@@ -170,6 +169,8 @@ const Challenge = () => {
               )}
             </div>
             <aside>
+              <h2>Explanation</h2>
+              <p>{explanation}</p>
               <Button href={link} target='_blank' bgColor='true'>
                 View on {source}
               </Button>
@@ -178,26 +179,26 @@ const Challenge = () => {
                   margin-top: 5rem;
                 `}
               >
-                <p
+                <h3
                   css={css`
                     text-align: center;
                   `}
                 >
                   {votes.length} upvote{votes.length !== 1 && 's'}
-                </p>
-                {user && (
+                </h3>
+                {user && !votes.includes(user.uid) && (
                   <Button onClick={handleVote} bgColor='true'>
                     Upvote
                   </Button>
                 )}
               </div>
+              {user && user.displayName === creator.name && (
+                <Button onClick={handleDelete} bgColor='true'>
+                  Delete Challenge
+                </Button>
+              )}
             </aside>
           </Container>
-          {user && user.displayName === creator.name && (
-            <Button onClick={handleDelete} bgColor='true'>
-              Delete Challenge
-            </Button>
-          )}
         </div>
       </>
     </Layout>
