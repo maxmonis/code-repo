@@ -4,15 +4,14 @@ import styled from '@emotion/styled';
 import { FirebaseContext } from '../../firebase';
 
 const Nav = styled.nav`
-  padding-left: 2rem;
+  padding-right: 2rem;
   a {
     font-size: 1.8rem;
-    margin-left: 2rem;
+    margin-right: 2rem;
     color: var(--grey2);
     font-family: 'PT Sans', sans-serif;
-
     &:last-of-type {
-      margin-right: 0;
+      margin-left: 0;
     }
   }
 `;
@@ -25,7 +24,7 @@ const Navbar = () => {
       </Link>
       {user && (
         <Link href='/new-challenge'>
-          <a>New</a>
+          <a>Create</a>
         </Link>
       )}
     </Nav>
