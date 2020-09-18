@@ -1,4 +1,4 @@
-const validate = ({ source, url, name, description, explanation }) => {
+const validate = ({ source, link, name, description, explanation }) => {
   let errors = {};
   if (!source) errors.source = 'Source is required';
   if (!link) {

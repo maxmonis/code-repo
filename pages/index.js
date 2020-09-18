@@ -10,7 +10,7 @@ const Index = () => {
     const getChallenges = () => {
       firebase.db
         .collection('challenges')
-        .orderBy('created', 'desc')
+        .orderBy('published', 'desc')
         .onSnapshot(handleSnapshot);
     };
     getChallenges();

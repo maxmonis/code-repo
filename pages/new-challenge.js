@@ -112,7 +112,7 @@ const NewChallenge = () => {
               <Field>
                 <label htmlFor='link'>URL</label>
                 <input
-                  type='link'
+                  type='url'
                   id='link'
                   name='link'
                   placeholder='Link to this challenge'
