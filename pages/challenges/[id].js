@@ -74,6 +74,7 @@ const Challenge = () => {
   const handleChange = (e) => setMessage(e.target.value);
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!message) return;
     const { uid, displayName } = user;
     const updatedComments = [...comments, { message, uid, displayName }];
     firebase.db
@@ -135,7 +136,29 @@ const Challenge = () => {
               </Button>
             </div>
             <aside>
-              <h2>Comments</h2>
+              {user && (
+                <>
+                  <h2>Add a Comment</h2>
+                  <form onSubmit={handleSubmit}>
+                    <Field>
+                      <input
+                        type='text'
+                        value={message}
+                        onChange={handleChange}
+                        autoFocus
+                      />
+                    </Field>
+                    {message && <Submit type='submit' value='Add Comment' />}
+                  </form>
+                </>
+              )}
+              <h2
+                css={css`
+                  margin: 2rem 0;
+                `}
+              >
+                Comments
+              </h2>
               {comments.length ? (
                 <ul>
                   {comments.map((comment, i) => (
@@ -166,27 +189,6 @@ const Challenge = () => {
                 </ul>
               ) : (
                 <h4>No comments yet...seems a good time to add one</h4>
-              )}{' '}
-              {user && (
-                <>
-                  <h2
-                    css={css`
-                      margin: 2rem 0;
-                    `}
-                  >
-                    Add a Comment
-                  </h2>
-                  <form onSubmit={handleSubmit}>
-                    <Field>
-                      <input
-                        type='text'
-                        value={message}
-                        onChange={handleChange}
-                      />
-                    </Field>
-                    <Submit type='submit' value='Add Comment' />
-                  </form>
-                </>
               )}
               <div
                 css={css`
