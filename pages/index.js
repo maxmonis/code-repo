@@ -1,27 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import Layout from '../components/layout/Layout';
 import Challenge from '../components/layout/Challenge';
-import { FirebaseContext } from '../firebase';
+import useChallenges from '../hooks/useChallenges';
 
 const Index = () => {
-  const [challenges, setChallenges] = useState([]);
-  const { firebase } = useContext(FirebaseContext);
-  useEffect(() => {
-    const getChallenges = () => {
-      firebase.db
-        .collection('challenges')
-        .orderBy('published', 'desc')
-        .onSnapshot(handleSnapshot);
-    };
-    getChallenges();
-  }, []);
-  function handleSnapshot(snapshot) {
-    const challenges = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setChallenges(challenges);
-  }
+  const challenges = useChallenges('published');
   return (
     <div>
       <Layout>
