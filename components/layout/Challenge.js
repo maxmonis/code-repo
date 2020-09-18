@@ -95,7 +95,7 @@ const Challenge = ({ challenge }) => {
           <Text>{description}</Text>
           <Comments>
             <div>
-              <img src='/static/img/comment.png' />
+              <img src='/comment.png' />
               <p>
                 {comments.length} comment{comments.length !== 1 && 's'}
               </p>
