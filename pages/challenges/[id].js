@@ -23,6 +23,7 @@ const Challenge = () => {
   const [message, setMessage] = useState('');
   const [confirmation, setConfirmation] = useState('');
   const [error, setError] = useState(false);
+  const [referenceDB, setReferenceDB] = useState(true);
   const [displayForm, setDisplayForm] = useState(false);
   const toggle = () => setDisplayForm(!displayForm);
   const router = useRouter();
@@ -30,14 +31,16 @@ const Challenge = () => {
     query: { id },
   } = router;
   useEffect(() => {
-    if (id) {
+    if (id && referenceDB) {
       const getChallenge = async () => {
         const query = await firebase.db.collection('challenges').doc(id);
         const challenge = await query.get();
         if (challenge.exists) {
           setChallenge(challenge.data());
+          setReferenceDB(false);
         } else {
           setError(true);
+          setReferenceDB(false);
         }
       };
       getChallenge();
@@ -66,6 +69,7 @@ const Challenge = () => {
       .doc(id)
       .update({ votes: updatedVotes });
     setChallenge({ ...challenge, votes: updatedVotes });
+    setReferenceDB(true);
   };
   const handleChange = (e) => setMessage(e.target.value);
   const handleSubmit = (e) => {
@@ -78,6 +82,7 @@ const Challenge = () => {
       .update({ comments: updatedComments });
     setChallenge({ ...challenge, comments: updatedComments });
     setMessage('');
+    setReferenceDB(true);
   };
   const namesMatch = () =>
     confirmation.toLowerCase().replace(/ /g, '') ===
