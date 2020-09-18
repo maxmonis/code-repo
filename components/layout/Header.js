@@ -12,6 +12,8 @@ const Container = styled.div`
   max-width: 1200px;
   width: 95%;
   margin: 0 auto;
+  display: grid;
+  justify-content: center;
   @media (min-width: 768px) {
     display: flex;
     justify-content: space-between;
@@ -51,7 +53,6 @@ const Header = () => {
             <Logo>CR</Logo>
           </Link>
           <Search />
-          <Navbar />
         </div>
         <div
           css={css`
@@ -59,19 +60,25 @@ const Header = () => {
             align-items: center;
           `}
         >
+          <Navbar />
           {user ? (
             <Button onClick={handleLogout} bgColor='true'>
               Log {user.displayName} Out
             </Button>
           ) : (
-            <>
+            <div
+              css={css`
+                display: flex;
+                flex: row;
+              `}
+            >
               <Link href='/login'>
                 <Button bgColor='true'>Login</Button>
               </Link>
               <Link href='/create-account'>
                 <Button>Create Account</Button>
               </Link>
-            </>
+            </div>
           )}
         </div>
       </Container>
