@@ -13,17 +13,17 @@ const Search = () => {
   const challenges = useChallenges('published');
   const [result, setResult] = useState([]);
   useEffect(() => {
-    const search = q.toLowerCase();
+    const search = q.toLowerCase().replace(/ /g, '');
     const filtered = challenges.filter((challenge) => {
       return (
-        challenge.name.toLowerCase().includes(search) ||
-        challenge.description.toLowerCase().includes(search)
+        challenge.name.toLowerCase().replace(/ /g, '').includes(search) ||
+        challenge.description.toLowerCase().replace(/ /g, '').includes(search)
       );
     });
     setResult(filtered);
   }, [q, challenges]);
   return !result.length ? (
-    <Error />
+    <Error message={'Your query did not return any results'} />
   ) : (
     <div>
       <Layout>

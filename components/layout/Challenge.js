@@ -74,6 +74,7 @@ const Votes = styled.div`
 const Challenge = ({ challenge }) => {
   const {
     name,
+    source,
     description,
     imgURL,
     votes,
@@ -90,7 +91,9 @@ const Challenge = ({ challenge }) => {
         </div>
         <div>
           <Link href='/challenges/[id]' as={`/challenges/${id}`}>
-            <Title>{name}</Title>
+            <Title>
+              {name} ({source})
+            </Title>
           </Link>
           <Text>{description}</Text>
           <Comments>

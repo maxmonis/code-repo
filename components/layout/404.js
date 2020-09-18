@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import Link from 'next/link';
 import Layout from './Layout';
 
-const Error = () => {
+const Error = ({ message }) => {
   return (
     <Layout>
       <div
@@ -12,7 +12,7 @@ const Error = () => {
           text-align: center;
         `}
       >
-        <h1>404: Something went wrong, sorry about that!</h1>
+        <h1>404: {message || 'Something went wrong, sorry about that!'}</h1>
         <Link href='/'>Return to homepage</Link>
       </div>
     </Layout>
