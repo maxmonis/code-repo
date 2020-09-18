@@ -3,6 +3,7 @@ import Layout from '../components/layout/Layout';
 import Challenge from '../components/layout/Challenge';
 import useChallenges from '../hooks/useChallenges';
 import { useRouter } from 'next/router';
+import Error from '../components/layout/404';
 
 const Search = () => {
   const router = useRouter();
@@ -13,15 +14,17 @@ const Search = () => {
   const [result, setResult] = useState([]);
   useEffect(() => {
     const search = q.toLowerCase();
-    const filter = challenges.filter((challenge) => {
+    const filtered = challenges.filter((challenge) => {
       return (
         challenge.name.toLowerCase().includes(search) ||
         challenge.description.toLowerCase().includes(search)
       );
     });
-    setResult(filter);
+    setResult(filtered);
   }, [q, challenges]);
-  return (
+  return !result.length ? (
+    <Error />
+  ) : (
     <div>
       <Layout>
         <div className='container'>
