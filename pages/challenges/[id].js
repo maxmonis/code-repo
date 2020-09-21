@@ -49,6 +49,7 @@ const Challenge = () => {
   if (!error && !Object.keys(challenge).length) return 'Loading...';
   const {
     name,
+    description,
     votes,
     link,
     source,
@@ -127,15 +128,17 @@ const Challenge = () => {
           </p>
           <Container>
             <div>
+              <h2>Description</h2>
+              <p>{description}</p>
               <h2>Code</h2>
               <img src={imgURL} />
+            </div>
+            <aside>
               <h2>Explanation</h2>
               <p>{explanation}</p>
               <Button href={link} target='_blank' bgColor='true'>
                 View on {source}
               </Button>
-            </div>
-            <aside>
               {user && (
                 <>
                   <h2>Add a Comment</h2>
