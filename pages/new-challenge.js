@@ -40,6 +40,7 @@ const NewChallenge = () => {
   const { source, link, name, description, explanation } = values;
   async function newChallenge() {
     if (!user) return router.push('/login');
+    const { displayName, uid } = user;
     const challenge = {
       source,
       link,
@@ -50,10 +51,7 @@ const NewChallenge = () => {
       votes: [],
       comments: [],
       published: Date.now(),
-      creator: {
-        name: user.displayName,
-        id: user.uid,
-      },
+      creator: { displayName, uid },
     };
     try {
       firebase.db.collection('challenges').add(challenge);
