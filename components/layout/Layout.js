@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header';
+import Footer from './Footer';
 import { Global, css } from '@emotion/core';
 import Head from 'next/head';
 
@@ -78,6 +79,7 @@ const Layout = ({ children }) => {
       </Head>
       <Header />
       <main>{children}</main>
+      <Footer />
     </>
   );
 };
