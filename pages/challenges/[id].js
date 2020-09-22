@@ -16,6 +16,20 @@ const Container = styled.div`
     column-gap: 2rem;
   }
 `;
+const Votes = styled.div`
+  flex: 0 0 auto;
+  text-align: center;
+  border: 1px solid #e1e1e1;
+  padding: 1rem 3rem;
+  div {
+    font-size: 2rem;
+  }
+  p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+`;
 
 const Challenge = () => {
   const { firebase, user } = useContext(FirebaseContext);
@@ -145,49 +159,18 @@ const Challenge = () => {
                 margin-top: 5rem;
               `}
             >
-              <h3
-                css={css`
-                  text-align: center;
-                `}
-              >
-                {numVotes} upvote{numVotes !== 1 && 's'}
-              </h3>
+              <Votes>
+                <div> &#9650; </div>
+                <p>
+                  {numVotes} upvote{numVotes !== 1 && 's'}
+                </p>
+              </Votes>
               {user && !votes.includes(user.uid) && (
                 <Button onClick={handleVote} bgColor='true'>
                   Upvote
                 </Button>
               )}
             </div>
-            {isCreator() && !displayForm && (
-              <Button onClick={toggle}>Delete Challenge</Button>
-            )}
-            {isCreator() && displayForm && (
-              <div
-                css={css`
-                  text-align: center;
-                  border: 2px solid #e1e1e1;
-                  padding: 1rem;
-                `}
-              >
-                <h3>Permanently delete {name}?</h3>
-                <Field>
-                  <input
-                    type='text'
-                    placeholder='Confirm name of challenge to be deleted'
-                    value={confirmation}
-                    onChange={handleConfirmation}
-                  />
-                </Field>
-                <Button onClick={toggle} bgColor='true'>
-                  Cancel
-                </Button>
-                {namesMatch() && (
-                  <Button onClick={handleDelete}>
-                    I understand the consequences, delete {name}
-                  </Button>
-                )}
-              </div>
-            )}
           </aside>
         </Container>
         {user && (
@@ -235,8 +218,7 @@ const Challenge = () => {
                     {user && user.uid === comment.uid
                       ? 'you'
                       : comment.displayName}
-                    {comment.uid === creator.uid &&
-                      ' (creator of this post)'}
+                    {comment.uid === creator.uid && ' (creator of this post)'}
                   </span>
                 </p>
               </li>
@@ -244,6 +226,43 @@ const Challenge = () => {
           </ul>
         ) : (
           <h4>No comments yet...seems a good time to add one</h4>
+        )}
+      </div>
+      <div
+        css={css`
+          width: 75%;
+          margin: 0 auto;
+        `}
+      >
+        {isCreator() && !displayForm && (
+          <Button onClick={toggle}>Delete Challenge</Button>
+        )}
+        {isCreator() && displayForm && (
+          <div
+            css={css`
+              text-align: center;
+              border: 2px solid #e1e1e1;
+              padding: 1rem;
+            `}
+          >
+            <h3>Permanently delete {name}?</h3>
+            <Field>
+              <input
+                type='text'
+                placeholder='Confirm name of challenge to be deleted'
+                value={confirmation}
+                onChange={handleConfirmation}
+              />
+            </Field>
+            <Button onClick={toggle} bgColor='true'>
+              Cancel
+            </Button>
+            {namesMatch() && (
+              <Button onClick={handleDelete}>
+                I understand the consequences, delete {name}
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </Layout>
