@@ -51,6 +51,7 @@ const Challenge = () => {
     name,
     description,
     votes,
+    numVotes,
     link,
     source,
     imgURL,
@@ -64,12 +65,13 @@ const Challenge = () => {
     if (!user) return router.push('/login');
     const { uid } = user;
     if (votes.includes(uid)) return;
+    const newNum = numVotes + 1;
     const updatedVotes = [...votes, uid];
     firebase.db
       .collection('challenges')
       .doc(id)
-      .update({ votes: updatedVotes });
-    setChallenge({ ...challenge, votes: updatedVotes });
+      .update({ votes: updatedVotes, numVotes: newNum });
+    setChallenge({ ...challenge, votes: updatedVotes, numVotes: newNum });
     setReferenceDB(true);
   };
   const handleChange = (e) => setMessage(e.target.value);
@@ -165,7 +167,7 @@ const Challenge = () => {
               <ul>
                 {comments.map((comment, i) => (
                   <li
-                    key={comment.uid - i}
+                    key={`${comment.uid} - ${i}`}
                     css={css`
                       border: 1px solid #e1e1e1;
                       padding: 2rem;
@@ -202,7 +204,7 @@ const Challenge = () => {
                   text-align: center;
                 `}
               >
-                {votes.length} upvote{votes.length !== 1 && 's'}
+                {numVotes} upvote{numVotes !== 1 && 's'}
               </h3>
               {user && !votes.includes(user.uid) && (
                 <Button onClick={handleVote} bgColor='true'>

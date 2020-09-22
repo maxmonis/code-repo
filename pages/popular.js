@@ -4,7 +4,7 @@ import Preview from '../components/layout/Preview';
 import useChallenges from '../hooks/useChallenges';
 
 const Popular = () => {
-  const challenges = useChallenges('votes');
+  const challenges = useChallenges('numVotes');
   return (
     <div>
       <Layout>

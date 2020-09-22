@@ -78,7 +78,7 @@ const Preview = ({ challenge }) => {
     source,
     description,
     imgURL,
-    votes,
+    numVotes,
     comments,
     published,
     creator,
@@ -118,7 +118,7 @@ const Preview = ({ challenge }) => {
       <Votes>
         <div> &#9650; </div>
         <p>
-          {votes.length} upvote{votes.length !== 1 && 's'}
+          {numVotes} upvote{numVotes !== 1 && 's'}
         </p>
       </Votes>
     </Container>
