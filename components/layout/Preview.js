@@ -6,16 +6,20 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const Container = styled.li`
   padding: 2rem 4rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   border-bottom: 1px solid #e1e1e1;
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 const Details = styled.div`
-  flex: 0 1 900px;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  column-gap: 5rem;
+  @media (min-width: 768px) {
+    flex: 0 1 900px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    column-gap: 5rem;
+  }
 `;
 const Title = styled.a`
   font-size: 2rem;
@@ -55,7 +59,10 @@ const Comments = styled.div`
   }
 `;
 const Image = styled.img`
-  width: 200px;
+  width: 50%;
+  @media (min-width: 768px) {
+    width: 200px;
+  }
 `;
 const Votes = styled.div`
   flex: 0 0 auto;
@@ -69,6 +76,9 @@ const Votes = styled.div`
     margin: 0;
     font-size: 2rem;
     font-weight: 700;
+  }
+  @media (max-width: 768px) {
+    margin: 1rem 5rem 3rem;
   }
 `;
 

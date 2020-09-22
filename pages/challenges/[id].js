@@ -140,60 +140,6 @@ const Challenge = () => {
             <Button href={link} target='_blank' bgColor='true'>
               View on {source}
             </Button>
-            {user && (
-              <>
-                <h2>Add a Comment</h2>
-                <form onSubmit={handleSubmit}>
-                  <Field>
-                    <input
-                      type='text'
-                      value={message}
-                      onChange={handleChange}
-                      autoFocus
-                    />
-                  </Field>
-                  {message && <Submit type='submit' value='Add Comment' />}
-                </form>
-              </>
-            )}
-            <h2
-              css={css`
-                margin: 2rem 0;
-              `}
-            >
-              Comments
-            </h2>
-            {comments.length ? (
-              <ul>
-                {comments.map((comment, i) => (
-                  <li
-                    key={`${comment.uid} - ${i}`}
-                    css={css`
-                      border: 1px solid #e1e1e1;
-                      padding: 2rem;
-                    `}
-                  >
-                    <p>{comment.message}</p>
-                    <p>
-                      Written by{' '}
-                      <span
-                        css={css`
-                          font-weight: bold;
-                        `}
-                      >
-                        {user && user.displayName === comment.displayName
-                          ? 'you'
-                          : comment.displayName}
-                        {comment.displayName === creator.displayName &&
-                          ' (creator of this post)'}
-                      </span>
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h4>No comments yet...seems a good time to add one</h4>
-            )}
             <div
               css={css`
                 margin-top: 5rem;
@@ -244,6 +190,61 @@ const Challenge = () => {
             )}
           </aside>
         </Container>
+        {user && (
+          <>
+            <h2>Add a Comment</h2>
+            <form onSubmit={handleSubmit}>
+              <Field>
+                <input
+                  type='text'
+                  value={message}
+                  onChange={handleChange}
+                  placeholder={`Let ${creator.displayName} know what you think of this solution`}
+                  autoFocus
+                />
+              </Field>
+              {message && <Submit type='submit' value='Add Comment' />}
+            </form>
+          </>
+        )}
+        <h2
+          css={css`
+            margin: 2rem 0;
+          `}
+        >
+          Comments
+        </h2>
+        {comments.length ? (
+          <ul>
+            {comments.map((comment, i) => (
+              <li
+                key={`${comment.uid} - ${i}`}
+                css={css`
+                  border: 1px solid #e1e1e1;
+                  padding: 2rem;
+                `}
+              >
+                <p>{comment.message}</p>
+                <p>
+                  Written by{' '}
+                  <span
+                    css={css`
+                      font-weight: bold;
+                    `}
+                  >
+                    {user && user.uid === comment.uid
+                      ? 'you'
+                      : comment.displayName}
+                    {comment.uid === creator.uid &&
+                      ' (creator of this post)'}
+                  </span>
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <h4>No comments yet...seems a good time to add one</h4>
+        )}
       </div>
     </Layout>
   );
