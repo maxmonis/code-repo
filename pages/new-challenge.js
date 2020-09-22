@@ -23,9 +23,6 @@ const Container = styled.div`
 const NewChallenge = () => {
   const { user, firebase } = useContext(FirebaseContext);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [imgName, setImgName] = useState('');
   const [imgURL, setImgURL] = useState('');
   const router = useRouter();
   const INITIAL_STATE = {
@@ -35,15 +32,15 @@ const NewChallenge = () => {
     description: '',
     explanation: '',
   };
-  const {
-    values,
-    handleChange,
-    handleSubmit,
-    handleBlur,
-  } = useValidate(INITIAL_STATE, validateChallenge, newChallenge);
+  const { values, handleChange, handleSubmit, handleBlur } = useValidate(
+    INITIAL_STATE,
+    validateChallenge,
+    newChallenge
+  );
   const { source, link, name, description, explanation } = values;
   async function newChallenge() {
     if (!user) return router.push('/login');
+    const { displayName, uid } = user;
     const challenge = {
       source,
       link,
@@ -54,10 +51,7 @@ const NewChallenge = () => {
       votes: [],
       comments: [],
       published: Date.now(),
-      creator: {
-        name: user.displayName,
-        id: user.uid,
-      },
+      creator: { displayName, uid },
     };
     try {
       firebase.db.collection('challenges').add(challenge);
@@ -67,32 +61,16 @@ const NewChallenge = () => {
       setError(message);
     }
   }
-  const handleUploadStart = () => {
-    setProgress(0);
-    setLoading(true);
-  };
-  const handleProgress = (progress) => setProgress({ progress });
   const handleUploadError = (error) => {
     setError(error.message);
     console.error(error);
   };
-  const handleUploadSuccess = (name) => {
-    setProgress(100);
-    setLoading(false);
-    setImgName(name);
+  const handleUploadSuccess = (name) =>
     firebase.storage
       .ref('challenges')
-      .child(imgName)
+      .child(name)
       .getDownloadURL()
-      .then((url) => {
-        try {
-          console.log(url);
-          setImgURL(url);
-        } catch (error) {
-          console.log(error);
-        }
-      });
-  };
+      .then((url) => setImgURL(url));
   return !user ? (
     <Error404 />
   ) : (
@@ -138,12 +116,12 @@ const NewChallenge = () => {
                   />
                 </Field>
                 <Field>
-                  <label htmlFor='link'>URL</label>
+                  <label htmlFor='link'>Link</label>
                   <input
                     type='url'
                     id='link'
                     name='link'
-                    placeholder='Link to this challenge'
+                    placeholder='URL of this challenge'
                     value={link}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -171,13 +149,11 @@ const NewChallenge = () => {
                     style={{ margin: '0', padding: '0' }}
                     accept='image/*'
                     id='screenshot'
-                    name='screenshot'
                     randomizeFilename
                     storageRef={firebase.storage.ref('challenges')}
-                    onUploadStart={handleUploadStart}
                     onUploadError={handleUploadError}
                     onUploadSuccess={handleUploadSuccess}
-                    onProgress={handleProgress}
+                    required
                   />
                 </Field>
                 <Field>
@@ -192,7 +168,7 @@ const NewChallenge = () => {
                     required
                   />
                 </Field>
-                <p>Upload a screenshot of your code (.jpg)</p>
+                <p>Upload a screenshot of your code</p>
               </fieldset>
             </Container>
             {error && <Error>{error}</Error>}

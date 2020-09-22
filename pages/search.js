@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
-import Challenge from '../components/layout/Challenge';
+import Preview from '../components/layout/Preview';
 import useChallenges from '../hooks/useChallenges';
 import { useRouter } from 'next/router';
 import Error from '../components/layout/404';
@@ -30,7 +30,7 @@ const Search = () => {
         <div className='container'>
           <ul>
             {result.map((challenge) => (
-              <Challenge key={challenge.id} challenge={challenge} />
+              <Preview key={challenge.id} challenge={challenge} />
             ))}
           </ul>
         </div>

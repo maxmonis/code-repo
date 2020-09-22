@@ -5,7 +5,7 @@ import Link from 'next/link';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const Container = styled.li`
-  padding: 0 4rem;
+  padding: 2rem 4rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -72,7 +72,7 @@ const Votes = styled.div`
   }
 `;
 
-const Challenge = ({ challenge }) => {
+const Preview = ({ challenge }) => {
   const {
     name,
     source,
@@ -111,7 +111,7 @@ const Challenge = ({ challenge }) => {
           </Comments>
           <p>
             Published {formatDistanceToNow(new Date(published))} ago by{' '}
-            {creator.name}
+            {creator.displayName}
           </p>
         </div>
       </Details>
@@ -125,4 +125,4 @@ const Challenge = ({ challenge }) => {
   );
 };
 
-export default Challenge;
+export default Preview;
