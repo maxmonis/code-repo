@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../components/layout/Layout';
-import Challenge from '../components/layout/Challenge';
+import Preview from '../components/layout/Preview';
 import useChallenges from '../hooks/useChallenges';
 
 const Index = () => {
@@ -11,7 +11,7 @@ const Index = () => {
         <div className='container'>
           <ul>
             {challenges.map((challenge) => (
-              <Challenge key={challenge.id} challenge={challenge} />
+              <Preview key={challenge.id} challenge={challenge} />
             ))}
           </ul>
         </div>

@@ -72,7 +72,7 @@ const Votes = styled.div`
   }
 `;
 
-const Challenge = ({ challenge }) => {
+const Preview = ({ challenge }) => {
   const {
     name,
     source,
@@ -125,4 +125,4 @@ const Challenge = ({ challenge }) => {
   );
 };
 
-export default Challenge;
+export default Preview;
