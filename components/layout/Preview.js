@@ -7,7 +7,11 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 const Container = styled.li`
   padding: 2rem 4rem 1rem;
   border-bottom: 1px solid #e1e1e1;
+  text-align: center;
   @media (min-width: 768px) {
+    text-align: left;
+  }
+  @media (min-width: 992px) {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,6 +37,23 @@ const Text = styled.p`
   font-size: 1.6rem;
   margin: 0;
   color: #888;
+  @media (min-width: 576px) {
+    text-align: left;
+  }
+`;
+const Feedback = styled.div`
+  margin: 2rem auto 1rem;
+  display: inline-block;
+  justify-content: space-between;
+  @media (min-width: 576px) {
+    display: flex;
+    flex: row;
+  }
+  @media (min-width: 992px) {
+    margin-top: 0;
+    display: inline-block;
+    padding-left: 3rem;
+  }
 `;
 const Comments = styled.div`
   margin-bottom: 2rem;
@@ -53,34 +74,21 @@ const Comments = styled.div`
     font-size: 2rem;
     margin-right: 1rem;
     font-weight: 700;
-    &:last-of-type {
-      margin: 0;
-    }
+    margin: 0;
   }
 `;
 const Votes = styled.div`
-  flex: 0 0 auto;
   text-align: center;
   border: 1px solid #e1e1e1;
-  padding: 1rem 3rem;
-  div {
-    font-size: 2rem;
-  }
+  display: flex;
+  flex: row;
+  margin-bottom: 2rem;
+  padding: 1rem 4rem 1rem 1rem;
+  font-size: 2rem;
   p {
     margin: 0;
-    font-size: 2rem;
     font-weight: 700;
-  }
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    display: flex;
-    flex: row;
-    justify-content: space-between;
-    margin: 0 0 2rem;
-    padding: 1rem 4rem 1rem 2rem;
-    div {
-      margin-right: 1rem;
-    }
+    margin: 0 2rem 0 1rem;
   }
 `;
 
@@ -96,26 +104,17 @@ const Preview = ({ challenge }) => {
     creator,
     id,
   } = challenge;
-  console.log(description.length);
   return (
     <Container>
       <Details>
         <div
           css={css`
-            width: 75%;
-            margin: auto;
-            @media (min-width: 768px) {
-              width: 200px;
-            }
-          `}
-        >
+            margin: 0 auto;
+            width: 200px;
+          `}>
           <img src={imgURL} />
         </div>
-        <div
-          css={css`
-            padding-right: 3rem;
-          `}
-        >
+        <div>
           <Link href='/challenges/[id]' as={`/challenges/${id}`}>
             <Title>
               {name} ({source})
@@ -132,18 +131,7 @@ const Preview = ({ challenge }) => {
           </Text>
         </div>
       </Details>
-      <div
-        css={css`
-          display: flex;
-          flex: row;
-          justify-content: space-between;
-          margin-top: 2rem;
-          @media (min-width: 768px) {
-            margin-top: 0;
-            display: inline-block;
-          }
-        `}
-      >
+      <Feedback>
         <Comments>
           <div>
             <img src='/comment.png' />
@@ -158,7 +146,7 @@ const Preview = ({ challenge }) => {
             {numVotes} upvote{numVotes !== 1 && 's'}
           </p>
         </Votes>
-      </div>
+      </Feedback>
     </Container>
   );
 };
