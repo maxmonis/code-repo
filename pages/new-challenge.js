@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import Layout from '../components/layout/Layout';
 import Error404 from '../components/layout/404';
 import { Form, Field, Submit, Error } from '../components/ui/Form';
+import Button from '../components/ui/Button';
 import useValidate from '../hooks/useValidate';
 import validateChallenge from '../validation/validateChallenge';
 import { FirebaseContext } from '../firebase';
@@ -19,15 +20,14 @@ const Container = styled.div`
     min-width: 90%;
   }
 `;
-
-const Button = styled.label`
+const Uploader = styled.label`
   background-color: var(--orange);
   color: white;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
   width: 75%;
-  max-width: 300px;
+  max-width: 400px;
   text-align: center;
   margin: 0 auto 2rem;
 `;
@@ -36,6 +36,7 @@ const NewChallenge = () => {
   const { user, firebase } = useContext(FirebaseContext);
   const [error, setError] = useState(null);
   const [imgURL, setImgURL] = useState('');
+  const [imgName, setImgName] = useState('');
   const router = useRouter();
   const INITIAL_STATE = {
     source: '',
@@ -78,12 +79,23 @@ const NewChallenge = () => {
     setError(error.message);
     console.error(error);
   };
-  const handleUploadSuccess = name =>
+  const handleUploadSuccess = name => {
+    setImgName(name);
     firebase.storage
       .ref('challenges')
       .child(name)
       .getDownloadURL()
       .then(url => setImgURL(url));
+  };
+  const handleDelete = () => {
+    try {
+      firebase.storage.ref('challenges').child(imgName).delete();
+      setImgName('');
+      setImgURL('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return !user ? (
     <Error404 />
   ) : (
@@ -155,21 +167,36 @@ const NewChallenge = () => {
               </fieldset>
               <fieldset>
                 <legend>Your Solution</legend>
-                <Field>
-                  <Button className='btn'>
-                    Upload a Screenshot
-                    <FileUploader
-                      hidden
-                      accept='image/*'
-                      id='screenshot'
-                      randomizeFilename
-                      storageRef={firebase.storage.ref('challenges')}
-                      onUploadError={handleUploadError}
-                      onUploadSuccess={handleUploadSuccess}
-                      required
-                    />
-                  </Button>
-                </Field>
+                {imgURL ? (
+                  <div
+                    css={css`
+                      margin: 0 auto;
+                      width: 75%;
+                      max-width: 300px;
+                      margin-bottom: 2rem;
+                    `}>
+                    <img src={imgURL} />
+                    <Button onClick={handleDelete} bgColor={true}>
+                      Delete Screenshot
+                    </Button>
+                  </div>
+                ) : (
+                  <Field>
+                    <Uploader className='btn'>
+                      Upload a Screenshot of Your Code
+                      <FileUploader
+                        hidden
+                        accept='image/*'
+                        id='screenshot'
+                        randomizeFilename
+                        storageRef={firebase.storage.ref('challenges')}
+                        onUploadError={handleUploadError}
+                        onUploadSuccess={handleUploadSuccess}
+                        required
+                      />
+                    </Uploader>
+                  </Field>
+                )}
                 <Field>
                   <label htmlFor='explanation'>Explanation</label>
                   <textarea
@@ -182,7 +209,6 @@ const NewChallenge = () => {
                     required
                   />
                 </Field>
-                <p>Upload a screenshot of your code</p>
               </fieldset>
             </Container>
             {error && <Error>{error}</Error>}

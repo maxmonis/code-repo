@@ -60,7 +60,7 @@ const Layout = ({ children }) => {
             &.container {
               max-width: 1200px;
               width: 95%;
-              padding: 5rem 0;
+              padding: 0 0 5rem;
               margin: 0 auto;
             }
           }
