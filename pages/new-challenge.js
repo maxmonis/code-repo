@@ -60,6 +60,7 @@ const NewChallenge = () => {
       name,
       description,
       imgURL,
+      imgName,
       explanation,
       votes: [],
       numVotes: 0,
@@ -87,9 +88,9 @@ const NewChallenge = () => {
       .getDownloadURL()
       .then(url => setImgURL(url));
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
     try {
-      firebase.storage.ref('challenges').child(imgName).delete();
+      await firebase.storage.ref('challenges').child(imgName).delete();
       setImgName('');
       setImgURL('');
     } catch (error) {
