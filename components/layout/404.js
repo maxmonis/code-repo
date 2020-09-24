@@ -15,11 +15,6 @@ const Error = ({ message }) => {
         <h1>404: {message || 'Something went wrong, sorry about that!'}</h1>
         <Link href='/'>Return to homepage</Link>
       </div>
-      <div
-        css={css`
-          height: 500px;
-        `}
-      />
     </Layout>
   );
 };

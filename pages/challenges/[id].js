@@ -69,6 +69,7 @@ const Challenge = () => {
     link,
     source,
     imgURL,
+    imgName,
     comments,
     explanation,
     published,
@@ -88,8 +89,8 @@ const Challenge = () => {
     setChallenge({ ...challenge, votes: updatedVotes, numVotes: newNum });
     setReferenceDB(true);
   };
-  const handleChange = (e) => setMessage(e.target.value);
-  const handleSubmit = (e) => {
+  const handleChange = e => setMessage(e.target.value);
+  const handleSubmit = e => {
     e.preventDefault();
     if (!message) return;
     const { uid, displayName } = user;
@@ -111,12 +112,13 @@ const Challenge = () => {
     if (!isCreator()) return router.push('/');
     try {
       await firebase.db.collection('challenges').doc(id).delete();
+      await firebase.storage.ref('challenges').child(imgName).delete();
       router.push('/');
     } catch (error) {
       console.log(error);
     }
   };
-  const handleConfirmation = (e) => setConfirmation(e.target.value);
+  const handleConfirmation = e => setConfirmation(e.target.value);
   return error ? (
     <Error />
   ) : (
@@ -126,8 +128,7 @@ const Challenge = () => {
           css={css`
             text-align: center;
             margin-top: 5rem;
-          `}
-        >
+          `}>
           {name}
         </h1>
         <p>
@@ -135,8 +136,7 @@ const Challenge = () => {
           <span
             css={css`
               font-weight: bold;
-            `}
-          >
+            `}>
             {isCreator() ? 'you' : creator.displayName}{' '}
           </span>
           {formatDistanceToNow(new Date(published))} ago
@@ -157,8 +157,7 @@ const Challenge = () => {
             <div
               css={css`
                 margin-top: 5rem;
-              `}
-            >
+              `}>
               <Votes>
                 <div> &#9650; </div>
                 <p>
@@ -193,8 +192,7 @@ const Challenge = () => {
         <h2
           css={css`
             margin: 2rem 0;
-          `}
-        >
+          `}>
           Comments
         </h2>
         {comments.length ? (
@@ -205,16 +203,14 @@ const Challenge = () => {
                 css={css`
                   border: 1px solid #e1e1e1;
                   padding: 2rem;
-                `}
-              >
+                `}>
                 <p>{comment.message}</p>
                 <p>
                   Written by{' '}
                   <span
                     css={css`
                       font-weight: bold;
-                    `}
-                  >
+                    `}>
                     {user && user.uid === comment.uid
                       ? 'you'
                       : comment.displayName}
@@ -232,8 +228,7 @@ const Challenge = () => {
         css={css`
           width: 75%;
           margin: 0 auto;
-        `}
-      >
+        `}>
         {isCreator() && !displayForm && (
           <Button onClick={toggle}>Delete Challenge</Button>
         )}
@@ -243,8 +238,7 @@ const Challenge = () => {
               text-align: center;
               border: 2px solid #e1e1e1;
               padding: 1rem;
-            `}
-          >
+            `}>
             <h3>Permanently delete {name}?</h3>
             <Field>
               <input

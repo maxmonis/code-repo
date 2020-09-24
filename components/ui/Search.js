@@ -6,7 +6,7 @@ import { css } from '@emotion/core';
 const Text = styled.input`
   border: 1px solid var(--grey3);
   padding: 1rem;
-  min-width: 300px;
+  min-width: 250px;
 `;
 const Submit = styled.button`
   height: 3rem;

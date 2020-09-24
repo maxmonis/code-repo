@@ -17,17 +17,23 @@ export const Field = styled.div`
   display: flex;
   align-items: center;
   max-width: 95%;
-  label {
+  label:not(.btn) {
     font-size: 1.8rem;
     flex: 0 0 100px;
+    @media (max-width: 576px) {
+      flex: 0;
+    }
   }
   input,
   textarea {
-    flex: 1;
     padding: 1rem;
+    flex: 1;
   }
   textarea {
     height: 200px;
+  }
+  @media (max-width: 576px) {
+    flex-direction: column;
   }
 `;
 
