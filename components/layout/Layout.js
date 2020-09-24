@@ -18,6 +18,8 @@ const Layout = ({ children }) => {
           html {
             font-size: 62.5%;
             box-sizing: border-box;
+            position: relative;
+            min-height: 100%;
           }
           *,
           *:before,
@@ -77,8 +79,13 @@ const Layout = ({ children }) => {
           rel='stylesheet'
         />
       </Head>
-      <Header />
-      <main>{children}</main>
+      <div
+        css={css`
+          margin-bottom: 20px;
+        `}>
+        <Header />
+        <main>{children}</main>
+      </div>
       <Footer />
     </>
   );

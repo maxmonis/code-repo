@@ -4,10 +4,14 @@ import { css } from '@emotion/core';
 const Footer = () => (
   <div
     css={css`
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
       text-align: center;
-    `}
-  >
-    <h6>© Max Monis {new Date().getFullYear()}</h6>
+    `}>
+    <h4>© Max Monis {new Date().getFullYear()}</h4>
   </div>
 );
 
