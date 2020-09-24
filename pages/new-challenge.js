@@ -20,6 +20,18 @@ const Container = styled.div`
   }
 `;
 
+const Button = styled.label`
+  background-color: var(--orange);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 75%;
+  max-width: 300px;
+  text-align: center;
+  margin: 0 auto 2rem;
+`;
+
 const NewChallenge = () => {
   const { user, firebase } = useContext(FirebaseContext);
   const [error, setError] = useState(null);
@@ -62,16 +74,16 @@ const NewChallenge = () => {
       setError(message);
     }
   }
-  const handleUploadError = (error) => {
+  const handleUploadError = error => {
     setError(error.message);
     console.error(error);
   };
-  const handleUploadSuccess = (name) =>
+  const handleUploadSuccess = name =>
     firebase.storage
       .ref('challenges')
       .child(name)
       .getDownloadURL()
-      .then((url) => setImgURL(url));
+      .then(url => setImgURL(url));
   return !user ? (
     <Error404 />
   ) : (
@@ -82,8 +94,7 @@ const NewChallenge = () => {
             css={css`
               text-align: center;
               margin-top: 5rem;
-            `}
-          >
+            `}>
             Upload New Challenge
           </h1>
           <Form onSubmit={handleSubmit}>
@@ -145,17 +156,19 @@ const NewChallenge = () => {
               <fieldset>
                 <legend>Your Solution</legend>
                 <Field>
-                  <label htmlFor='screenshot'>Screenshot</label>
-                  <FileUploader
-                    style={{ margin: '0', padding: '0' }}
-                    accept='image/*'
-                    id='screenshot'
-                    randomizeFilename
-                    storageRef={firebase.storage.ref('challenges')}
-                    onUploadError={handleUploadError}
-                    onUploadSuccess={handleUploadSuccess}
-                    required
-                  />
+                  <Button className='btn'>
+                    Upload a Screenshot
+                    <FileUploader
+                      hidden
+                      accept='image/*'
+                      id='screenshot'
+                      randomizeFilename
+                      storageRef={firebase.storage.ref('challenges')}
+                      onUploadError={handleUploadError}
+                      onUploadSuccess={handleUploadSuccess}
+                      required
+                    />
+                  </Button>
                 </Field>
                 <Field>
                   <label htmlFor='explanation'>Explanation</label>
