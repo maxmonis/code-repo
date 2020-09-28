@@ -52,7 +52,6 @@ const Content = styled.div`
 const Header = () => {
   const { user, firebase } = useContext(FirebaseContext);
   const handleLogout = () => {
-    Router.push('/login');
     firebase.logout();
   };
   const [mobile, setMobile] = useState(

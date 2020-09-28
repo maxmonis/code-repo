@@ -182,7 +182,6 @@ const Challenge = () => {
                   value={message}
                   onChange={handleChange}
                   placeholder={`Let ${creator.displayName} know what you think of this solution`}
-                  autoFocus
                 />
               </Field>
               {message && <Submit type='submit' value='Add Comment' />}
