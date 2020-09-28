@@ -3,8 +3,8 @@ import Layout from '../../components/layout/Layout';
 import Error from '../../components/layout/404';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import { Field, Submit } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
+import Comments from '../../components/challenge/Comments';
 import Delete from '../../components/challenge/Delete';
 import { useRouter } from 'next/router';
 import { FirebaseContext } from '../../firebase';
@@ -35,7 +35,6 @@ const Votes = styled.div`
 const Challenge = () => {
   const { firebase, user } = useContext(FirebaseContext);
   const [challenge, setChallenge] = useState({});
-  const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
   const [referenceDB, setReferenceDB] = useState(true);
   const router = useRouter();
@@ -87,18 +86,14 @@ const Challenge = () => {
     setChallenge({ ...challenge, votes: updatedVotes, numVotes: newNum });
     setReferenceDB(true);
   };
-  const handleChange = e => setMessage(e.target.value);
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (!message) return;
-    const { uid, displayName } = user;
-    const updatedComments = [...comments, { message, uid, displayName }];
+  const addComment = comment => {
+    if (!comment) return;
+    const updatedComments = [...comments, comment];
     firebase.db
       .collection('challenges')
       .doc(id)
       .update({ comments: updatedComments });
     setChallenge({ ...challenge, comments: updatedComments });
-    setMessage('');
     setReferenceDB(true);
   };
   const handleDelete = async () => {
@@ -163,56 +158,12 @@ const Challenge = () => {
             </div>
           </aside>
         </Container>
-        {user && (
-          <>
-            <h2>Add a Comment</h2>
-            <form onSubmit={handleSubmit}>
-              <Field>
-                <input
-                  type='text'
-                  value={message}
-                  onChange={handleChange}
-                  placeholder={`Let ${creator.displayName} know what you think of this solution`}
-                />
-              </Field>
-              {message && <Submit type='submit' value='Add Comment' />}
-            </form>
-          </>
-        )}
-        <h2
-          css={css`
-            margin: 2rem 0;
-          `}>
-          Comments
-        </h2>
-        {comments.length ? (
-          <ul>
-            {comments.map((comment, i) => (
-              <li
-                key={`${comment.uid} - ${i}`}
-                css={css`
-                  border: 1px solid #e1e1e1;
-                  padding: 2rem;
-                `}>
-                <p>{comment.message}</p>
-                <p>
-                  Written by{' '}
-                  <span
-                    css={css`
-                      font-weight: bold;
-                    `}>
-                    {user && user.uid === comment.uid
-                      ? 'you'
-                      : comment.displayName}
-                    {comment.uid === creator.uid && ' (creator of this post)'}
-                  </span>
-                </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <h4>No comments yet...seems a good time to add one</h4>
-        )}
+        <Comments
+          user={user}
+          comments={comments}
+          creator={creator}
+          addComment={addComment}
+        />
       </div>
       {isCreator() && <Delete name={name} handleDelete={handleDelete} />}
     </Layout>

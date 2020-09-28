@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/core';
 import Button from '../ui/Button';
-import { Field } from '..//ui/Form';
+import { Field } from '../ui/Form';
 
 const Delete = ({ name, handleDelete }) => {
   const [displayForm, setDisplayForm] = useState(false);
