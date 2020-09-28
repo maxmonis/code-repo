@@ -6,7 +6,10 @@ import { css } from '@emotion/core';
 const Text = styled.input`
   border: 1px solid var(--grey3);
   padding: 1rem;
-  min-width: 250px;
+  min-width: 200px;
+  @media (min-width: 576px) {
+    min-width: 275px;
+  }
 `;
 const Submit = styled.button`
   height: 3rem;
@@ -28,8 +31,8 @@ const Submit = styled.button`
 
 const Search = () => {
   const [search, setSearch] = useState('');
-  const handleChange = (e) => setSearch(e.target.value);
-  const handleSubmit = (e) => {
+  const handleChange = e => setSearch(e.target.value);
+  const handleSubmit = e => {
     e.preventDefault();
     if (!search.trim()) return;
     Router.push({ pathname: '/search', query: { q: search } });
@@ -39,8 +42,7 @@ const Search = () => {
       css={css`
         position: relative;
       `}
-      onSubmit={handleSubmit}
-    >
+      onSubmit={handleSubmit}>
       <Text type='text' placeholder='Search...' onChange={handleChange} />
       <Submit type='submit'>Search</Submit>
     </form>

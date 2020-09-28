@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
@@ -29,13 +29,24 @@ const Logo = styled.a`
   margin-right: 2rem;
   cursor: pointer;
 `;
-const Content = styled.div`
-  display: inline-block;
-  align-items: space-between;
-  @media (min-width: 400px) {
-    display: flex;
-    align-items: center;
+const Icon = styled.button`
+  height: 3rem;
+  width: 3rem;
+  display: block;
+  background-size: 4rem;
+  background-image: url('/search.png');
+  background-repeat: no-repeat;
+  background-color: white;
+  border: none;
+  text-indent: -9999px;
+  &:hover {
+    cursor: pointer;
   }
+`;
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Header = () => {
@@ -44,6 +55,17 @@ const Header = () => {
     Router.push('/login');
     firebase.logout();
   };
+  const [mobile, setMobile] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 420
+  );
+  const updateMedia = () => {
+    setMobile(window.innerWidth < 420);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
+  const [showSearch, setShowSearch] = useState(false);
   return (
     <header
       css={css`
@@ -52,17 +74,37 @@ const Header = () => {
       `}>
       <Container>
         <Content>
-          <Link href='/'>
-            <Logo>CR</Logo>
-          </Link>
-          <Search />
+          {mobile && showSearch ? (
+            <>
+              <Link href='/'>
+                <Logo>CR</Logo>
+              </Link>
+              <Search />
+            </>
+          ) : mobile ? (
+            <>
+              <Link href='/'>
+                <Logo>CodeRepo</Logo>
+              </Link>
+              <Icon onClick={() => setShowSearch(true)} />
+            </>
+          ) : (
+            <>
+              <Link href='/'>
+                <Logo>CodeRepo</Logo>
+              </Link>{' '}
+              <Search />
+            </>
+          )}
         </Content>
         <Content>
           <Navbar user={user} />
           {user ? (
-            <Button onClick={handleLogout} bgColor='true'>
-              Log {user.displayName} Out
-            </Button>
+            <div>
+              <Button onClick={handleLogout} bgColor='true'>
+                Logout
+              </Button>
+            </div>
           ) : (
             <div
               css={css`
@@ -73,7 +115,7 @@ const Header = () => {
                 <Button bgColor='true'>Login</Button>
               </Link>
               <Link href='/create-account'>
-                <Button>Create Account</Button>
+                <Button>Signup</Button>
               </Link>
             </div>
           )}
