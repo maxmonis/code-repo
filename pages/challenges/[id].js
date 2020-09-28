@@ -5,6 +5,7 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Field, Submit } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
+import Delete from '../../components/challenge/Delete';
 import { useRouter } from 'next/router';
 import { FirebaseContext } from '../../firebase';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -35,11 +36,8 @@ const Challenge = () => {
   const { firebase, user } = useContext(FirebaseContext);
   const [challenge, setChallenge] = useState({});
   const [message, setMessage] = useState('');
-  const [confirmation, setConfirmation] = useState('');
   const [error, setError] = useState(false);
   const [referenceDB, setReferenceDB] = useState(true);
-  const [displayForm, setDisplayForm] = useState(false);
-  const toggle = () => setDisplayForm(!displayForm);
   const router = useRouter();
   const {
     query: { id },
@@ -103,13 +101,7 @@ const Challenge = () => {
     setMessage('');
     setReferenceDB(true);
   };
-  const namesMatch = () =>
-    confirmation.toLowerCase().replace(/ /g, '') ===
-    name.toLowerCase().replace(/ /g, '');
   const handleDelete = async () => {
-    if (!namesMatch()) return;
-    if (!user) return router.push('/login');
-    if (!isCreator()) return router.push('/');
     try {
       await firebase.db.collection('challenges').doc(id).delete();
       await firebase.storage.ref('challenges').child(imgName).delete();
@@ -118,7 +110,6 @@ const Challenge = () => {
       console.log(error);
     }
   };
-  const handleConfirmation = e => setConfirmation(e.target.value);
   return error ? (
     <Error />
   ) : (
@@ -223,41 +214,7 @@ const Challenge = () => {
           <h4>No comments yet...seems a good time to add one</h4>
         )}
       </div>
-      <div
-        css={css`
-          width: 75%;
-          margin: 0 auto;
-        `}>
-        {isCreator() && !displayForm && (
-          <Button onClick={toggle}>Delete Challenge</Button>
-        )}
-        {isCreator() && displayForm && (
-          <div
-            css={css`
-              text-align: center;
-              border: 2px solid #e1e1e1;
-              padding: 1rem;
-            `}>
-            <h3>Permanently delete {name}?</h3>
-            <Field>
-              <input
-                type='text'
-                placeholder='Confirm name of challenge to be deleted'
-                value={confirmation}
-                onChange={handleConfirmation}
-              />
-            </Field>
-            <Button onClick={toggle} bgColor='true'>
-              Cancel
-            </Button>
-            {namesMatch() && (
-              <Button onClick={handleDelete}>
-                I understand the consequences, delete {name}
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
+      {isCreator() && <Delete name={name} handleDelete={handleDelete} />}
     </Layout>
   );
 };
