@@ -3,10 +3,9 @@ import Link from 'next/link';
 import styled from '@emotion/styled';
 
 const Nav = styled.nav`
-  @media (min-width: 400px) padding-right: 2rem;
   a {
     font-size: 1.8rem;
-    margin-right: 2rem;
+    margin-right: 1rem;
     color: var(--grey2);
     font-family: 'PT Sans', sans-serif;
   }

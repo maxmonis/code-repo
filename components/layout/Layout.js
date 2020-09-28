@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { Global, css } from '@emotion/core';
 import Head from 'next/head';
+import { FirebaseContext } from '../../firebase';
 
 const Layout = ({ children }) => {
+  const { user } = useContext(FirebaseContext);
+  const [title, setTitle] = useState('CodeRepo');
+  useEffect(() => {
+    setTitle(user ? `CodeRepo | ${user.displayName}` : 'CodeRepo');
+  }, [user]);
   return (
     <>
       <Global
@@ -67,7 +73,7 @@ const Layout = ({ children }) => {
         `}
       />
       <Head>
-        <title>CodeRepo</title>
+        <title>{title}</title>
         <link
           rel='stylesheet'
           href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css'

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import Link from 'next/link';
@@ -42,12 +42,12 @@ const Text = styled.p`
   }
 `;
 const Feedback = styled.div`
-  margin: 2rem auto 1rem;
-  display: inline-block;
-  justify-content: space-between;
+  display: none;
   @media (min-width: 576px) {
     display: flex;
     flex: row;
+    margin: 2rem auto 1rem;
+    justify-content: space-between;
   }
   @media (min-width: 992px) {
     margin-top: 0;
